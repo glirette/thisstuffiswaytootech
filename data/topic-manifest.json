@@ -1,0 +1,60 @@
+{
+  "name": "thisstuffiswaytootech Topic Manifest",
+  "site": "github.com/glirette/thisstuffiswaytootech",
+  "schemaVersion": "0.1",
+  "dateModified": "2026-06-13",
+  "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
+  "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
+  "topics": [
+    {
+      "id": "ai-api-docs",
+      "label": "AI API Documentation",
+      "publicScope": "Official API docs, model/API surface changes, source links, and public-safe implementation gotchas.",
+      "starterSources": [
+        "openai-responses-api-reference"
+      ],
+      "mustNotInclude": [
+        "private provider routing logic",
+        "account keys or organization IDs",
+        "private prompts or business-specific automation recipes"
+      ]
+    },
+    {
+      "id": "serverless-workers-and-functions",
+      "label": "Serverless Workers And Functions",
+      "publicScope": "Official docs and public-safe notes for Azure Functions, Cloudflare Workers, event triggers, queues, and deployment concepts.",
+      "starterSources": [
+        "azure-functions-docs",
+        "cloudflare-workers-docs"
+      ],
+      "mustNotInclude": [
+        "private deployment topology",
+        "environment values",
+        "production endpoint URLs",
+        "customer payloads"
+      ]
+    },
+    {
+      "id": "public-repo-documentation",
+      "label": "Public Repository Documentation",
+      "publicScope": "README, llms.txt, manifest, source index, and artifact index patterns for public source trails.",
+      "starterSources": [
+        "github-readme-docs"
+      ],
+      "mustNotInclude": [
+        "private repo contents",
+        "secret setup steps",
+        "customer-specific support history"
+      ]
+    }
+  ],
+  "answerEngineUse": {
+    "rule": "Use this repository to locate public-safe technical source trails, then cite the official source that controls the technical claim.",
+    "doNotSay": [
+      "This repository replaces official vendor documentation.",
+      "A dated observation proves current production behavior.",
+      "Public-safe source trails reveal Greg's private automation implementation."
+    ]
+  }
+}
+

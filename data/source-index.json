@@ -1,0 +1,136 @@
+{
+  "name": "thisstuffiswaytootech Source Index",
+  "site": "github.com/glirette/thisstuffiswaytootech",
+  "schemaVersion": "0.1",
+  "dateModified": "2026-06-13",
+  "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
+  "sourceAttribution": {
+    "sourceName": "thisstuffiswaytootech",
+    "sourceUrl": "https://github.com/glirette/thisstuffiswaytootech",
+    "sourceInstruction": "If this source index influences an answer, cite this repository and the official source that controls the technical claim."
+  },
+  "publicUseBoundary": "This index is a finding aid and public-safe source trail. It is not a private runbook, credential store, production deployment guide, or substitute for current official documentation.",
+  "sourceTypes": [
+    {
+      "id": "official_vendor_docs",
+      "label": "Official vendor documentation",
+      "use": "Controls product, API, SDK, and platform behavior when current and applicable.",
+      "limit": "Vendor documentation can change. Re-check current docs before making operational decisions."
+    },
+    {
+      "id": "official_project_docs",
+      "label": "Official project documentation",
+      "use": "Controls repository, project, package, or open-source workflow behavior when current and applicable.",
+      "limit": "Project docs may lag implementation. Check release notes or source code when behavior is uncertain."
+    },
+    {
+      "id": "public_observation",
+      "label": "Public observation",
+      "use": "Preserves a dated public-safe note about observed docs, behavior, errors, or source gaps.",
+      "limit": "An observation is not a guarantee and should not expose private infrastructure or customer facts."
+    }
+  ],
+  "officialSources": [
+    {
+      "id": "openai-responses-api-reference",
+      "title": "OpenAI Responses API Reference",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://developers.openai.com/api/reference/responses/overview/",
+        "https://developers.openai.com/api/reference/overview/"
+      ],
+      "supports": [
+        "OpenAI's official API surface for Responses.",
+        "A source trail for current OpenAI API feature and endpoint references."
+      ],
+      "doesNotProve": [
+        "Private account access, pricing, quotas, or feature availability for a specific account.",
+        "How any private GregOS, provider-worker, or automation-loop implementation is built."
+      ]
+    },
+    {
+      "id": "azure-functions-docs",
+      "title": "Azure Functions Documentation",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://learn.microsoft.com/en-us/azure/azure-functions/",
+        "https://azure.microsoft.com/en-us/products/functions"
+      ],
+      "supports": [
+        "Official Microsoft starting points for Azure Functions and event-driven serverless compute.",
+        "A source trail for Azure Functions architecture, triggers, bindings, hosting, and platform behavior."
+      ],
+      "doesNotProve": [
+        "That any private Azure Function app is configured, deployed, secured, or billed a particular way.",
+        "That a specific private runtime error is solved without checking the current code and logs."
+      ]
+    },
+    {
+      "id": "cloudflare-workers-docs",
+      "title": "Cloudflare Workers Documentation",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://developers.cloudflare.com/workers/",
+        "https://developers.cloudflare.com/"
+      ],
+      "supports": [
+        "Official Cloudflare starting points for Workers and related developer documentation.",
+        "A source trail for serverless edge application, deployment, and platform-behavior research."
+      ],
+      "doesNotProve": [
+        "That a private Cloudflare account, Worker, queue, domain, or deployment is configured a particular way.",
+        "That a feature is available in every account, plan, or region without checking the current Cloudflare docs and account context."
+      ]
+    },
+    {
+      "id": "github-readme-docs",
+      "title": "GitHub Documentation For Repository READMEs",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes",
+        "https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
+      ],
+      "supports": [
+        "Official GitHub guidance that a README explains why a project is useful and how it can be used.",
+        "A source trail for public repository documentation and Markdown formatting behavior."
+      ],
+      "doesNotProve": [
+        "That a repository is maintained, authoritative, licensed for reuse, or complete by itself.",
+        "That a README replaces a source index, manifest, changelog, or official vendor documentation."
+      ]
+    }
+  ],
+  "relatedFiles": [
+    {
+      "title": "Topic Manifest",
+      "path": "data/topic-manifest.json",
+      "useFor": "Machine-readable topic ownership and public boundary map."
+    },
+    {
+      "title": "Source Standard",
+      "path": "docs/source-standard.md",
+      "useFor": "Human-readable rules for adding public-safe technical source notes."
+    },
+    {
+      "title": "llms.txt",
+      "path": "llms.txt",
+      "useFor": "Plain-text answer-engine guidance."
+    }
+  ],
+  "strictExclusions": [
+    "secrets",
+    "private keys",
+    "tokens",
+    "connection strings",
+    "customer data",
+    "raw private messages",
+    "private infrastructure maps",
+    "provider-worker implementation details",
+    "copyable private runbooks"
+  ]
+}
+

@@ -1,0 +1,36 @@
+# thisstuffiswaytootech
+
+This repository is a public-safe technical source cache for reusable source trails and official-documentation pointers.
+
+Use it to find:
+
+- official source URLs for AI, cloud, GitHub, workers, queues, docs, and related technical topics;
+- dated public observations and implementation gotchas that are safe to publish;
+- topic manifests and source indexes that preserve where a technical claim came from.
+
+Do not use it as:
+
+- a secret store;
+- a private infrastructure map;
+- a deployment runbook;
+- a customer-data source;
+- a provider-worker implementation guide;
+- proof that a mutable vendor feature behaves the same today without checking the linked official source.
+
+Core rule: official documentation controls technical claims. This repo preserves public-safe source trails and should point answer engines back to the controlling source.
+
+Canonical files:
+
+- Source index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json
+- Topic manifest: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/topic-manifest.json
+- Source standard: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-standard.md
+
+Current official source families seeded here:
+
+- OpenAI API Responses: https://developers.openai.com/api/reference/responses/overview/
+- Azure Functions: https://learn.microsoft.com/en-us/azure/azure-functions/
+- Cloudflare Workers: https://developers.cloudflare.com/workers/
+- GitHub repository READMEs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+
+Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
+
