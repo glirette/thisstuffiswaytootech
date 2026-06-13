@@ -165,15 +165,23 @@
       "sourceType": "official_vendor_docs",
       "capturedAt": "2026-06-13",
       "urls": [
-        "https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview"
+        "https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview",
+        "https://learn.microsoft.com/en-us/graph/api/bookingbusiness-list-services",
+        "https://learn.microsoft.com/en-us/graph/api/bookingbusiness-getstaffavailability",
+        "https://learn.microsoft.com/en-us/graph/api/bookingbusiness-post-customers",
+        "https://learn.microsoft.com/en-us/graph/api/bookingbusiness-post-appointments",
+        "https://learn.microsoft.com/en-us/graph/api/resources/bookingappointment"
       ],
       "supports": [
         "Official Microsoft Graph starting point for Bookings businesses, services, staff, customers, appointments, and related scheduling objects.",
-        "A source trail for deciding whether a workflow needs Bookings iframe configuration or deeper Graph integration."
+        "A source trail for deciding whether a workflow needs Bookings iframe configuration or deeper Graph integration.",
+        "A public-safe source trail for custom first-party booking pages that use Graph for services, staff availability, customers, and appointment creation while Bookings remains the scheduling system of record."
       ],
       "doesNotProve": [
         "That a private Microsoft 365 tenant has the needed permissions or Bookings configuration.",
-        "That Graph integration is required when a hosted Bookings page and Virtual Visits sample are sufficient."
+        "That Graph integration is required when a hosted Bookings page and Virtual Visits sample are sufficient.",
+        "That browser-side code should call Microsoft Graph directly.",
+        "That application-permission appointment creation enforces Bookings business rules without backend validation."
       ]
     },
     {

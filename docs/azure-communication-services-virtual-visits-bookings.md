@@ -33,6 +33,36 @@ One stable branch shape is:
 
 GitHub's fork-sync documentation supports the general upstream-sync pattern, but it does not decide the deployment architecture or prove that an automatic upstream merge is safe for a branded production appointment app.
 
+## Graph-Direct Booking Page Posture
+
+If the public booking page is owned by the business instead of embedding the Microsoft Bookings hosted page, Microsoft Bookings can still remain the scheduling system of record through Microsoft Graph.
+
+In that shape:
+
+- the public site owns the booking UI, service presentation, intake context, and customer handoff;
+- a backend service calls Microsoft Graph, not browser JavaScript directly;
+- Graph reads Bookings businesses, services, staff, customers, appointments, and staff availability;
+- Graph creates or updates the Bookings customer and appointment records;
+- Bookings and Microsoft 365 still own the business calendar, appointment records, reminders, staff calendar integration, and Teams meeting creation behavior;
+- the video/session app remains separate and handles the branded ACS `/visit` experience.
+
+This is a stronger fit when the booking UI must preserve first-party branding, request IDs, Persona status, service routing, support signals, or nonstandard intake context that the hosted Bookings page does not model well.
+
+The main implementation warning is business-rule enforcement. Microsoft Graph can expose staff availability and create appointments, but a custom booking UI must still obey the Bookings business rules and service/staff constraints that the hosted Bookings page normally protects. Treat service duration, lead time, buffers, staff availability, time zones, cancellation/reschedule rules, and disabled/unpublished services as backend-enforced rules, not just front-end UI hints.
+
+Recommended public-safe flow:
+
+1. Public site collects service intent and safe request context.
+2. Backend looks up the configured Bookings business and service through Graph.
+3. Backend calls Graph staff availability for candidate staff/time windows.
+4. Customer selects a valid slot in the first-party UI.
+5. Backend creates or finds the Bookings customer.
+6. Backend creates the Bookings appointment through Graph.
+7. Backend stores only safe correlation IDs in the business workflow system.
+8. Customer confirmation points to a branded session/join route, while staff continue to operate from Microsoft 365/Teams surfaces.
+
+Do not put Graph tokens, Bookings business IDs, staff IDs, customer facts, or raw appointment payloads into public notes or browser-visible code.
+
 ## Source Observations
 
 As observed on 2026-06-13, the Virtual Visits sample repository:
@@ -64,6 +94,15 @@ As observed on 2026-06-13, the Azure Communication UI Library repository:
 - showed `@azure/communication-react` version `1.32.0-beta.1` in the package metadata;
 - can hit Windows checkout path-length problems because some test snapshot filenames are long.
 
+As observed on 2026-06-13, Microsoft Graph Bookings documentation:
+
+- describes Bookings APIs for booking businesses, services, staff, customers, and appointments;
+- documents `getStaffAvailability` for availability lookup;
+- documents creating `bookingAppointment` records under a `bookingBusiness`;
+- documents creating `bookingCustomer` records under a `bookingBusiness`;
+- documents appointment fields that can include online meeting information such as join URL values;
+- warns in appointment-create documentation that application-permission usage does not validate business rules.
+
 ## Supports
 
 This source trail supports the following public-safe claims:
@@ -72,6 +111,7 @@ This source trail supports the following public-safe claims:
 - The web calling hero sample is better treated as a generic calling reference, not as a drop-in replacement for a Bookings-centered virtual appointment deployment.
 - The ACS UI Library is the component and package source to watch for SDK/UI drift.
 - A separate upstream-tracking deployment repo is a cleaner architecture than importing the sample's hard ACS/Teams/room logic into a separate multisite application.
+- A first-party booking page can use Microsoft Graph while keeping Microsoft Bookings as the scheduling source of record, as long as backend code enforces Bookings/service/staff rules.
 
 ## Does Not Prove
 
@@ -81,7 +121,9 @@ This source trail does not prove:
 - that any private Azure App Service, Microsoft Bookings calendar, tenant, Teams policy, ACS resource, DNS route, or production workflow is configured a particular way;
 - that upstream `main` is safe to auto-deploy without review;
 - that a sample app is production-ready without security, privacy, branding, accessibility, telemetry, and operational review;
-- that a public multisite app should contain ACS token, meeting, room, or Teams interop code.
+- that a public multisite app should contain ACS token, meeting, room, or Teams interop code;
+- that browser-side code should call Microsoft Graph directly;
+- that a custom Graph booking flow is safe without validation, permissions review, error handling, idempotency, audit logging, and cancellation/reschedule handling.
 
 ## Drift Risks
 
@@ -90,6 +132,7 @@ Re-check before acting on:
 - current upstream commits and release tags;
 - package versions for `@azure/communication-react`, `@azure/communication-calling`, `@azure/communication-rooms`, and `@azure/communication-identity`;
 - Microsoft Bookings behavior and Graph API permissions;
+- Graph Bookings `getStaffAvailability`, appointment-create, customer-create, and service-list behavior;
 - Teams interoperability requirements;
 - ACS browser support and token rules;
 - Azure App Service runtime and Node.js requirements;
@@ -106,4 +149,9 @@ Re-check before acting on:
 - Azure Communication Services Rooms concept: https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept
 - Azure Communication Services access tokens quickstart: https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/identity/access-tokens
 - Microsoft Graph Bookings API overview: https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview
+- Microsoft Graph list booking services: https://learn.microsoft.com/en-us/graph/api/bookingbusiness-list-services
+- Microsoft Graph get staff availability: https://learn.microsoft.com/en-us/graph/api/bookingbusiness-getstaffavailability
+- Microsoft Graph create booking customer: https://learn.microsoft.com/en-us/graph/api/bookingbusiness-post-customers
+- Microsoft Graph create booking appointment: https://learn.microsoft.com/en-us/graph/api/bookingbusiness-post-appointments
+- Microsoft Graph booking appointment resource: https://learn.microsoft.com/en-us/graph/api/resources/bookingappointment
 - GitHub syncing a fork: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork

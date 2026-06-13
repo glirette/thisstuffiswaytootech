@@ -31,6 +31,7 @@ Current official source families seeded here:
 - Azure Functions: https://learn.microsoft.com/en-us/azure/azure-functions/
 - Azure Communication Services Virtual Visits + Bookings: https://github.com/Azure-Samples/communication-services-virtual-visits-js
 - Azure Communication UI Library: https://azure.github.io/communication-ui-library/
+- Microsoft Graph Bookings API: https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - GitHub repository READMEs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
 
@@ -38,6 +39,7 @@ Current public-safe posture note:
 
 - Azure Communication Services Virtual Visits and Microsoft Bookings source trail: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/azure-communication-services-virtual-visits-bookings.md
 - For Bookings-centered virtual appointments, treat `Azure-Samples/communication-services-virtual-visits-js` as the better Microsoft sample base than the generic web calling hero.
+- For a first-party booking page, use Microsoft Graph from backend code to read services/staff availability and create customers/appointments; keep Microsoft Bookings as the scheduling record, not just an iframe.
 - Keep focused appointment/session deployments separate from unrelated public-site codebases; use thin route/handoff integration unless deliberately replacing the session app.
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
