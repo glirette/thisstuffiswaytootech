@@ -86,6 +86,114 @@
       ]
     },
     {
+      "id": "azure-communication-services-virtual-visits-js",
+      "title": "Azure Samples Communication Services Virtual Visits JavaScript",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://github.com/Azure-Samples/communication-services-virtual-visits-js",
+        "https://github.com/Azure-Samples/communication-services-virtual-visits-js/blob/main/docs/microsoft-bookings.md"
+      ],
+      "supports": [
+        "Microsoft's Azure Samples source for a branded Azure Communication Services virtual appointment web app.",
+        "A Bookings-centered sample with /book and /visit routes, Microsoft Bookings configuration, Teams staff join, and client join through a hosted ACS web app.",
+        "A public source trail for tracking upstream main, release tags, Node/runtime expectations, package versions, and Bookings integration behavior."
+      ],
+      "doesNotProve": [
+        "That any private deployment currently runs the observed version or configuration.",
+        "That upstream main is safe to auto-deploy without review.",
+        "That a separate multisite web app should import the sample's ACS token, meeting, room, or Teams interop logic."
+      ]
+    },
+    {
+      "id": "azure-communication-services-web-calling-hero",
+      "title": "Azure Samples Communication Services Web Calling Hero",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://github.com/Azure-Samples/communication-services-web-calling-hero"
+      ],
+      "supports": [
+        "Microsoft's Azure Samples source for a generic group calling experience using @azure/communication-react.",
+        "A comparison point for newer ACS calling sample package versions and raw calling UX patterns."
+      ],
+      "doesNotProve": [
+        "That the web calling hero sample replaces the Bookings-centered Virtual Visits sample for appointment workflows.",
+        "That a private appointment stack should abandon Microsoft Bookings or Teams interoperability."
+      ]
+    },
+    {
+      "id": "azure-communication-ui-library",
+      "title": "Azure Communication UI Library",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://github.com/Azure/communication-ui-library",
+        "https://azure.github.io/communication-ui-library/"
+      ],
+      "supports": [
+        "The project source and documentation for @azure/communication-react and ACS UI components.",
+        "A source trail for component, composite, peer-dependency, and package-version drift that can affect ACS virtual appointment samples."
+      ],
+      "doesNotProve": [
+        "That the UI library repository is itself a complete appointment deployment.",
+        "That beta package metadata should be adopted by a production app without compatibility review."
+      ]
+    },
+    {
+      "id": "azure-communication-services-virtual-appointment-building-blocks",
+      "title": "Azure Communication Services Virtual Appointment Building Blocks",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://learn.microsoft.com/en-us/azure/communication-services/concepts/teams-interop",
+        "https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept",
+        "https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/identity/access-tokens"
+      ],
+      "supports": [
+        "Official Microsoft documentation for ACS Teams interoperability, Rooms concepts, and access-token issuance.",
+        "A source trail for the underlying ACS concepts that virtual appointment samples rely on."
+      ],
+      "doesNotProve": [
+        "That a private tenant, Teams policy, ACS resource, room, meeting, or token service is configured correctly.",
+        "That a sample deployment satisfies production security, privacy, compliance, or operational requirements."
+      ]
+    },
+    {
+      "id": "microsoft-graph-bookings-api",
+      "title": "Microsoft Graph Bookings API Overview",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview"
+      ],
+      "supports": [
+        "Official Microsoft Graph starting point for Bookings businesses, services, staff, customers, appointments, and related scheduling objects.",
+        "A source trail for deciding whether a workflow needs Bookings iframe configuration or deeper Graph integration."
+      ],
+      "doesNotProve": [
+        "That a private Microsoft 365 tenant has the needed permissions or Bookings configuration.",
+        "That Graph integration is required when a hosted Bookings page and Virtual Visits sample are sufficient."
+      ]
+    },
+    {
+      "id": "github-syncing-fork",
+      "title": "GitHub Documentation For Syncing A Fork",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-13",
+      "urls": [
+        "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork"
+      ],
+      "supports": [
+        "Official GitHub guidance for bringing upstream changes into a fork.",
+        "A source trail for an upstream-tracking repo pattern where a focused deployment branch reviews Microsoft sample updates before deployment."
+      ],
+      "doesNotProve": [
+        "That upstream changes are safe to merge or deploy automatically.",
+        "That a fork-sync workflow replaces application-specific build, security, privacy, or regression checks."
+      ]
+    },
+    {
       "id": "github-readme-docs",
       "title": "GitHub Documentation For Repository READMEs",
       "sourceType": "official_project_docs",
@@ -116,6 +224,11 @@
       "useFor": "Human-readable rules for adding public-safe technical source notes."
     },
     {
+      "title": "Azure Communication Services Virtual Visits And Microsoft Bookings",
+      "path": "docs/azure-communication-services-virtual-visits-bookings.md",
+      "useFor": "Public-safe source trail and deployment posture for ACS Virtual Visits, Microsoft Bookings, and upstream-tracking sample deployments."
+    },
+    {
       "title": "llms.txt",
       "path": "llms.txt",
       "useFor": "Plain-text answer-engine guidance."
@@ -133,4 +246,3 @@
     "copyable private runbooks"
   ]
 }
-

@@ -35,6 +35,26 @@
       ]
     },
     {
+      "id": "azure-communication-services-virtual-appointments",
+      "label": "Azure Communication Services Virtual Appointments",
+      "publicScope": "Official Microsoft docs, Azure Samples repositories, Microsoft Bookings integration notes, ACS UI Library drift notes, and public-safe deployment posture for virtual appointment/session apps.",
+      "starterSources": [
+        "azure-communication-services-virtual-visits-js",
+        "azure-communication-services-web-calling-hero",
+        "azure-communication-ui-library",
+        "microsoft-graph-bookings-api",
+        "github-syncing-fork"
+      ],
+      "mustNotInclude": [
+        "private Azure tenant or resource details",
+        "production domain routing maps",
+        "customer appointments or meeting links",
+        "ACS connection strings or access tokens",
+        "private Bookings calendar configuration",
+        "copyable private deployment runbooks"
+      ]
+    },
+    {
       "id": "public-repo-documentation",
       "label": "Public Repository Documentation",
       "publicScope": "README, llms.txt, manifest, source index, and artifact index patterns for public source trails.",
@@ -57,4 +77,3 @@
     ]
   }
 }
-
