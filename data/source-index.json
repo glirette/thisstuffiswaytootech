@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-13",
+  "dateModified": "2026-06-14",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -65,6 +65,28 @@
       "doesNotProve": [
         "That any private Azure Function app is configured, deployed, secured, or billed a particular way.",
         "That a specific private runtime error is solved without checking the current code and logs."
+      ]
+    },
+    {
+      "id": "azure-arc-run-command",
+      "title": "Azure Arc-enabled Servers Run Command",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-14",
+      "urls": [
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/run-command",
+        "https://learn.microsoft.com/en-us/cli/azure/connectedmachine/run-command",
+        "https://learn.microsoft.com/en-us/cli/azure/deployment/group",
+        "https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview"
+      ],
+      "supports": [
+        "Official Microsoft documentation for Azure Arc Run Command on Arc-enabled servers.",
+        "A source trail for outputBlobUri and errorBlobUri usage with Azure Blob-backed command output and error streams.",
+        "A source trail for Azure CLI Run Command options, deployment group nonblocking submission, and Bicep as repeatable infrastructure."
+      ],
+      "doesNotProve": [
+        "That any private Arc-enabled server, storage account, or deployment is configured or working.",
+        "That SAS URIs should be logged, shared, or stored.",
+        "That Run Command is a high-volume work dispatcher instead of an administrative execution rail."
       ]
     },
     {
@@ -235,6 +257,11 @@
       "title": "Azure Communication Services Virtual Visits And Microsoft Bookings",
       "path": "docs/azure-communication-services-virtual-visits-bookings.md",
       "useFor": "Public-safe source trail and deployment posture for ACS Virtual Visits, Microsoft Bookings, and upstream-tracking sample deployments."
+    },
+    {
+      "title": "Azure Arc Run Command Blob Logging",
+      "path": "docs/azure-arc-run-command-blob-logging.md",
+      "useFor": "Public-safe source trail for Azure Arc Run Command, blob-backed stdout/stderr logging, nonblocking ARM deployment, and Bicep deployment posture."
     },
     {
       "title": "llms.txt",

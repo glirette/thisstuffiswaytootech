@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-13",
+  "dateModified": "2026-06-14",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -32,6 +32,22 @@
         "environment values",
         "production endpoint URLs",
         "customer payloads"
+      ]
+    },
+    {
+      "id": "azure-arc-run-command-operations",
+      "label": "Azure Arc Run Command Operations",
+      "publicScope": "Official Microsoft docs and public-safe notes for Azure Arc Run Command, blob-backed command logs, Bicep deployment posture, and Azure CLI deployment behavior.",
+      "starterSources": [
+        "azure-arc-run-command"
+      ],
+      "mustNotInclude": [
+        "private hostnames or resource IDs",
+        "SAS URIs or storage keys",
+        "secret setup steps",
+        "private runner topology",
+        "customer payloads",
+        "copyable private automation runbooks"
       ]
     },
     {
