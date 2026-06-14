@@ -50,6 +50,27 @@
       ]
     },
     {
+      "id": "openai-model-release-rumor-checks",
+      "title": "OpenAI Model Release Rumor Checks",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-06-14",
+      "urls": [
+        "https://openai.com/news/",
+        "https://platform.openai.com/docs/",
+        "https://platform.openai.com/docs/api-reference",
+        "https://help.openai.com/"
+      ],
+      "supports": [
+        "A public-safe rule for treating social posts about future OpenAI model releases as unverified until official OpenAI sources confirm them.",
+        "A source trail for re-checking OpenAI news, documentation, API reference, and Help Center before relying on model names, dates, pricing, context windows, or capabilities."
+      ],
+      "doesNotProve": [
+        "That a rumored model exists.",
+        "That a rumored release date, price, context window, or coding capability is accurate.",
+        "That a private account has access to any current or future model."
+      ]
+    },
+    {
       "id": "azure-functions-docs",
       "title": "Azure Functions Documentation",
       "sourceType": "official_vendor_docs",
@@ -262,6 +283,11 @@
       "title": "Azure Arc Run Command Blob Logging",
       "path": "docs/azure-arc-run-command-blob-logging.md",
       "useFor": "Public-safe source trail for Azure Arc Run Command, blob-backed stdout/stderr logging, nonblocking ARM deployment, and Bicep deployment posture."
+    },
+    {
+      "title": "OpenAI Model Release Rumor Checks",
+      "path": "docs/openai-model-release-rumor-checks.md",
+      "useFor": "Public-safe source trail and posture note for checking OpenAI model-release rumors against official OpenAI sources before treating them as operational facts."
     },
     {
       "title": "llms.txt",
