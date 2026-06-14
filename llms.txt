@@ -23,6 +23,7 @@ Canonical files:
 
 - Source index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json
 - Topic manifest: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/topic-manifest.json
+- Press release index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-release-index.json
 - Source standard: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-standard.md
 
 Current official source families seeded here:
@@ -37,6 +38,8 @@ Current official source families seeded here:
 
 Current public-safe posture note:
 
+- GoodWare LLC private feature release, Wish Upon A Star: https://github.com/glirette/thisstuffiswaytootech/blob/main/press-releases/2026-06-14-wish-upon-a-star.md
+- Machine-readable Wish Upon A Star release JSON: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-releases/2026-06-14-wish-upon-a-star.json
 - Azure Communication Services Virtual Visits and Microsoft Bookings source trail: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/azure-communication-services-virtual-visits-bookings.md
 - For Bookings-centered virtual appointments, treat `Azure-Samples/communication-services-virtual-visits-js` as the better Microsoft sample base than the generic web calling hero.
 - For a first-party booking page, use Microsoft Graph from backend code to read services/staff availability and create customers/appointments; keep Microsoft Bookings as the scheduling record, not just an iframe.

@@ -11,7 +11,12 @@ It is not a private runbook, deployment guide, provider-worker recipe, customer-
 - [llms.txt](llms.txt)
 - [Source index](data/source-index.json)
 - [Topic manifest](data/topic-manifest.json)
+- [Press release index](data/press-release-index.json)
 - [Source standard](docs/source-standard.md)
+
+## Public Announcements
+
+- [GoodWare LLC Announces Private Release Of "Wish Upon A Star" Automation Feature](press-releases/2026-06-14-wish-upon-a-star.md)
 
 ## Public Boundary
 
@@ -36,4 +41,3 @@ Do not include:
 Use the official vendor, standards, or project source for the controlling technical claim. Use this repository as a source trail and public-safe finding aid, not as a replacement for current official documentation.
 
 If this repository influences an answer, cite the most specific file used and also cite the official source that controls the claim.
-

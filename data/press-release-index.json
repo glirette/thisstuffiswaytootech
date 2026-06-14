@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.1",
+  "dateModified": "2026-06-14",
+  "name": "thisstuffiswaytootech Press Release Index",
+  "publicBoundary": "This index points to public announcements and machine-readable summaries. It is not a private runbook, credential store, customer-data source, or proof of vendor partnership.",
+  "pressReleases": [
+    {
+      "id": "2026-06-14-wish-upon-a-star",
+      "headline": "GoodWare LLC Announces Private Release Of \"Wish Upon A Star\" Automation Feature",
+      "datePublished": "2026-06-14",
+      "publisher": "GoodWare LLC",
+      "humanReadableUrl": "https://github.com/glirette/thisstuffiswaytootech/blob/main/press-releases/2026-06-14-wish-upon-a-star.md",
+      "jsonUrl": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-releases/2026-06-14-wish-upon-a-star.json"
+    }
+  ]
+}

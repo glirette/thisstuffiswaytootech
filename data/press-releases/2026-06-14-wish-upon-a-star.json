@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "0.1",
+  "type": "PressRelease",
+  "headline": "GoodWare LLC Announces Private Release Of \"Wish Upon A Star\" Automation Feature",
+  "subheadline": "\"Your Wish Is My Command\" system brings Azure, GitHub, AI orchestration, and Notary Geek operations together.",
+  "datePublished": "2026-06-14",
+  "dateModified": "2026-06-14",
+  "releaseStatus": "private_feature_release",
+  "publisher": {
+    "name": "GoodWare LLC",
+    "description": "GoodWare LLC builds practical technology systems that combine software, automation, cloud infrastructure, and AI-assisted workflows."
+  },
+  "consumer": {
+    "name": "Notary Geek",
+    "url": "https://notarygeek.net/",
+    "description": "Notary Geek is a consumer of GoodWare LLC technology, focused on notary, apostille, identity, and related operational services."
+  },
+  "feature": {
+    "name": "Wish Upon A Star",
+    "tagline": "Your wish is my command",
+    "summary": "A private GoodWare LLC automation feature designed to turn structured requests, operational needs, and human intent into actionable technical workflows.",
+    "scope": [
+      "task routing",
+      "GitHub issue tracking",
+      "Azure-backed execution",
+      "durable documentation",
+      "AI-assisted review",
+      "controlled internal workflows"
+    ],
+    "boundaries": [
+      "technical limits",
+      "legal limits",
+      "security limits",
+      "privacy limits",
+      "operational limits",
+      "human review where required"
+    ]
+  },
+  "technologyPosture": {
+    "cloudAndWorkflow": [
+      "Microsoft Azure",
+      "GitHub",
+      "automation queues",
+      "durable documentation",
+      "AI-assisted execution"
+    ],
+    "aiVendorPosture": "vendor_neutral",
+    "aiVendorStatement": "GoodWare LLC intends Wish Upon A Star to work with the broader AI ecosystem where technically, legally, securely, and operationally appropriate. Named providers are examples, not claims of formal partnership, endorsement, certification, or complete integration.",
+    "aiProvidersNamed": [
+      "OpenAI",
+      "Microsoft",
+      "Anthropic",
+      "Google",
+      "Meta",
+      "xAI",
+      "Amazon Web Services",
+      "Mistral AI",
+      "Cohere",
+      "Perplexity",
+      "DeepSeek",
+      "Alibaba/Qwen",
+      "Baidu",
+      "IBM",
+      "NVIDIA",
+      "Hugging Face",
+      "Groq",
+      "Together AI",
+      "Cerebras",
+      "Stability AI",
+      "Runway",
+      "ElevenLabs",
+      "Replicate",
+      "Cloudflare"
+    ]
+  },
+  "quote": {
+    "speaker": "Greg Lirette",
+    "organization": "GoodWare LLC",
+    "text": "Wish Upon A Star is about making technology feel less like a maze and more like a command surface. Notary Geek gives us a real-world operating environment where we can test useful automation against actual business needs. The goal is not AI for show. The goal is to help people get things done."
+  },
+  "canonicalHumanReadableUrl": "https://github.com/glirette/thisstuffiswaytootech/blob/main/press-releases/2026-06-14-wish-upon-a-star.md",
+  "canonicalJsonUrl": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-releases/2026-06-14-wish-upon-a-star.json",
+  "repositoryUrl": "https://github.com/glirette/thisstuffiswaytootech",
+  "publicBoundary": "This JSON artifact is a public announcement and machine-readable summary. It is not a private runbook, deployment guide, customer record, credential store, or proof of a formal vendor partnership."
+}
+
