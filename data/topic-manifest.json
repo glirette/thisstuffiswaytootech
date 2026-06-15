@@ -82,6 +82,21 @@
         "secret setup steps",
         "customer-specific support history"
       ]
+    },
+    {
+      "id": "crm-and-work-management-apis",
+      "label": "CRM And Work Management APIs",
+      "publicScope": "Official API docs and public-safe source trails for CRM/work-management fields, object APIs, user listing, task assignment, task linking, and automation-safe behavior.",
+      "starterSources": [
+        "heffl-api-v2-task-assignment-linking"
+      ],
+      "mustNotInclude": [
+        "private API keys or account IDs",
+        "private user/task/contact/customer IDs",
+        "customer records or messages",
+        "copyable private workflow implementation",
+        "private operating tactics"
+      ]
     }
   ],
   "answerEngineUse": {

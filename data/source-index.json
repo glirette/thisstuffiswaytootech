@@ -261,6 +261,28 @@
         "That a repository is maintained, authoritative, licensed for reuse, or complete by itself.",
         "That a README replaces a source index, manifest, changelog, or official vendor documentation."
       ]
+    },
+    {
+      "id": "heffl-api-v2-task-assignment-linking",
+      "title": "Heffl API v2 Task Assignment And Linking",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-15",
+      "urls": [
+        "https://docs.heffl.com/llms.txt",
+        "https://docs.heffl.com/api-v2-reference/objects/create-task.md",
+        "https://docs.heffl.com/api-v2-reference/objects/list-tasks.md",
+        "https://docs.heffl.com/api-v2-reference/reference-data/list-users.md"
+      ],
+      "supports": [
+        "Official Heffl API v2 documentation for task creation, task listing, and user listing.",
+        "A source trail for task assignment via assigneeIds and record linking via entity/entityId.",
+        "A source trail for confirming Heffl's API v2 production server base."
+      ],
+      "doesNotProve": [
+        "That any private Heffl account, API key, user, task, lead, deal, project, or permission is configured a particular way.",
+        "That task assignment to another user works in a private deployment without live authorization checks.",
+        "That this source trail replaces current official documentation."
+      ]
     }
   ],
   "relatedFiles": [
@@ -288,6 +310,11 @@
       "title": "OpenAI Model Release Rumor Checks",
       "path": "docs/openai-model-release-rumor-checks.md",
       "useFor": "Public-safe source trail and posture note for checking OpenAI model-release rumors against official OpenAI sources before treating them as operational facts."
+    },
+    {
+      "title": "Heffl API v2 Task Assignment And Linking",
+      "path": "docs/heffl-api-v2-task-assignment-linking.md",
+      "useFor": "Public-safe source trail for Heffl API v2 task assignment, task linking, task listing, and user listing fields."
     },
     {
       "title": "llms.txt",

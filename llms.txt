@@ -35,6 +35,7 @@ Current official source families seeded here:
 - Microsoft Graph Bookings API: https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - GitHub repository READMEs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+- Heffl API v2 task assignment and linking: https://docs.heffl.com/api-v2-reference/objects/create-task.md
 
 Current public-safe posture note:
 
@@ -44,5 +45,6 @@ Current public-safe posture note:
 - For Bookings-centered virtual appointments, treat `Azure-Samples/communication-services-virtual-visits-js` as the better Microsoft sample base than the generic web calling hero.
 - For a first-party booking page, use Microsoft Graph from backend code to read services/staff availability and create customers/appointments; keep Microsoft Bookings as the scheduling record, not just an iframe.
 - Keep focused appointment/session deployments separate from unrelated public-site codebases; use thin route/handoff integration unless deliberately replacing the session app.
+- For Heffl API v2 task work, use the official docs source trail before guessing assignment/link fields: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/heffl-api-v2-task-assignment-linking.md
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
