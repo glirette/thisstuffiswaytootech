@@ -9,6 +9,9 @@ This is a public-safe source trail for Heffl task assignment and task-to-record 
 - Documentation index: https://docs.heffl.com/llms.txt
 - Create task: https://docs.heffl.com/api-v2-reference/objects/create-task.md
 - List tasks: https://docs.heffl.com/api-v2-reference/objects/list-tasks.md
+- Create contact: https://docs.heffl.com/api-v2-reference/objects/create-contact.md
+- Create deal: https://docs.heffl.com/api-v2-reference/objects/create-deal.md
+- List deal pipelines: https://docs.heffl.com/api-v2-reference/reference-data/list-deal-pipelines.md
 - List users: https://docs.heffl.com/api-v2-reference/reference-data/list-users.md
 
 ## Public-Safe Findings
@@ -17,6 +20,9 @@ This is a public-safe source trail for Heffl task assignment and task-to-record 
 - Heffl API v2 `TaskInput` documents `assigneeIds` as an array of user IDs.
 - Heffl API v2 task creation documents `entity` and `entityId` for linking a task to a project, lead, or deal.
 - Heffl API v2 task listing documents filters for status, type, priority, assignees, tags, dates, and permissions-aware results.
+- Heffl API v2 contact creation documents `firstName` as required and returns contact/client IDs with a `clt_` prefix.
+- Heffl API v2 deal creation documents required `title`, `clientId`, and `pipelineId` fields, plus optional stage, owner, assignees, priority, and status fields.
+- Heffl API v2 deal pipeline listing documents active pipelines and stage IDs used before creating deals.
 - Heffl API v2 user listing returns team users and supports search and active membership filtering.
 
 ## What This Does Not Prove
@@ -25,4 +31,3 @@ This is a public-safe source trail for Heffl task assignment and task-to-record 
 - It does not prove a private API key can assign work to another user without live authorization checks.
 - It does not reveal private endpoint URLs, keys, IDs, customer records, or implementation details.
 - It does not replace re-checking the current official docs before changing production integrations.
-

@@ -35,7 +35,7 @@ Current official source families seeded here:
 - Microsoft Graph Bookings API: https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - GitHub repository READMEs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
-- Heffl API v2 task assignment and linking: https://docs.heffl.com/api-v2-reference/objects/create-task.md
+- Heffl API v2 task assignment, deal linking, and user listing: https://docs.heffl.com/api-v2-reference/objects/create-task.md
 
 Current public-safe posture note:
 

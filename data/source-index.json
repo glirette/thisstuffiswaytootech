@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-14",
+  "dateModified": "2026-06-15",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -271,12 +271,15 @@
         "https://docs.heffl.com/llms.txt",
         "https://docs.heffl.com/api-v2-reference/objects/create-task.md",
         "https://docs.heffl.com/api-v2-reference/objects/list-tasks.md",
+        "https://docs.heffl.com/api-v2-reference/objects/create-contact.md",
+        "https://docs.heffl.com/api-v2-reference/objects/create-deal.md",
+        "https://docs.heffl.com/api-v2-reference/reference-data/list-deal-pipelines.md",
         "https://docs.heffl.com/api-v2-reference/reference-data/list-users.md"
       ],
       "supports": [
-        "Official Heffl API v2 documentation for task creation, task listing, and user listing.",
+        "Official Heffl API v2 documentation for task creation, task listing, contact/deal creation, deal pipeline listing, and user listing.",
         "A source trail for task assignment via assigneeIds and record linking via entity/entityId.",
-        "A source trail for confirming Heffl's API v2 production server base."
+        "A source trail for confirming Heffl's API v2 production server base and deal-linking prerequisites."
       ],
       "doesNotProve": [
         "That any private Heffl account, API key, user, task, lead, deal, project, or permission is configured a particular way.",
