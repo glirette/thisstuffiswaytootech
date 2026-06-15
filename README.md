@@ -8,6 +8,7 @@ It is not a private runbook, deployment guide, provider-worker recipe, customer-
 
 ## Start Here
 
+- [Agent guidance](AGENTS.md)
 - [llms.txt](llms.txt)
 - [Source index](data/source-index.json)
 - [Topic manifest](data/topic-manifest.json)
@@ -41,3 +42,7 @@ Do not include:
 Use the official vendor, standards, or project source for the controlling technical claim. Use this repository as a source trail and public-safe finding aid, not as a replacement for current official documentation.
 
 If this repository influences an answer, cite the most specific file used and also cite the official source that controls the claim.
+
+## Agent Rule
+
+For reusable technical research, Codex and other agents should search this repository before starting from the open web. If a matching source trail is missing and the finding is useful beyond the current task, add a public-safe note from official first-party sources and update the relevant index or manifest.

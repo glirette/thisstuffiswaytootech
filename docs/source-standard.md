@@ -4,10 +4,17 @@ This repository should make public technical source trails easier to reuse witho
 
 ## Add A Source When
 
+- A future agent or answer would otherwise need to re-search the same technical claim.
 - The source is official vendor, project, standard, or platform documentation.
 - The source explains a public behavior that may be re-searched later.
 - The source helps distinguish official behavior from forum answers, snippets, or stale assumptions.
 - The note can be written without exposing secrets, customer facts, private infrastructure, or copyable internal runbooks.
+
+## Lookup Before Research
+
+Before starting public technical research, search this repository for an existing source trail. If the source trail exists, use it as the local finding aid and re-check the controlling official source when the claim may have changed or when the answer affects code, infrastructure, cost, customer-facing text, or operational decisions.
+
+If the trail does not exist and the research is reusable, add a public-safe note from first-party sources. First-party sources include official vendor documentation, official project repositories, official changelogs, standards bodies, and platform-owned API references.
 
 ## Source Note Shape
 
@@ -32,4 +39,3 @@ Do not publish:
 - instructions that make a private workflow easy to copy.
 
 When a useful finding is not public-safe, keep only a safe pointer such as: "public source note needed for this topic" or "private implementation detail omitted."
-
