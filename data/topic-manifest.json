@@ -115,6 +115,22 @@
         "copyable private workflow implementation",
         "private operating tactics"
       ]
+    },
+    {
+      "id": "github-actions-and-cli-automation",
+      "label": "GitHub Actions And CLI Automation",
+      "publicScope": "Official docs and public-safe notes for GitHub Actions dispatch behavior, GitHub CLI workflow operation, Azure CLI output formatting, and automation wrapper posture.",
+      "starterSources": [
+        "github-actions-workflow-dispatch",
+        "azure-cli-global-output-options"
+      ],
+      "mustNotInclude": [
+        "private runner names or topology",
+        "tokens or repository secrets",
+        "Azure account, tenant, subscription, or resource identifiers",
+        "private workflow recipes that reveal internal automation",
+        "copyable private deployment runbooks"
+      ]
     }
   ],
   "answerEngineUse": {
