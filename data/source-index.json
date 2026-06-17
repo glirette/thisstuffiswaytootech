@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-15",
+  "dateModified": "2026-06-16",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -68,6 +68,32 @@
         "That a rumored model exists.",
         "That a rumored release date, price, context window, or coding capability is accurate.",
         "That a private account has access to any current or future model."
+      ]
+    },
+    {
+      "id": "ai-provider-model-selection-source-trail",
+      "title": "AI Provider Model Selection Source Trail",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-06-16",
+      "urls": [
+        "https://platform.openai.com/docs/models",
+        "https://platform.openai.com/docs/pricing",
+        "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+        "https://docs.anthropic.com/en/api/messages",
+        "https://www.anthropic.com/pricing",
+        "https://api.straico.com/v2/models",
+        "https://api.straico.com/v2/chat/completions"
+      ],
+      "supports": [
+        "A public-safe source trail for checking official model documentation before relying on model names, context windows, pricing, coding capability, or routing suitability.",
+        "A machine-readable public-safe cache shape for provider/model source URLs and refresh requirements.",
+        "A source trail for separating public provider facts from private routing and spend policy."
+      ],
+      "doesNotProve": [
+        "That a private account has access to a specific model.",
+        "That a cached price, context window, or model list remains current.",
+        "That a private automation router should use one specific model for a private task.",
+        "Private account balances, entitlements, prompts, provider-worker implementation, or internal spend policy."
       ]
     },
     {
@@ -313,6 +339,16 @@
       "title": "OpenAI Model Release Rumor Checks",
       "path": "docs/openai-model-release-rumor-checks.md",
       "useFor": "Public-safe source trail and posture note for checking OpenAI model-release rumors against official OpenAI sources before treating them as operational facts."
+    },
+    {
+      "title": "AI Provider Model Selection Source Trail",
+      "path": "docs/ai-provider-model-selection-source-trail.md",
+      "useFor": "Public-safe source trail and refresh posture for OpenAI, Anthropic, and Straico model-selection documentation."
+    },
+    {
+      "title": "AI Provider Model Source Cache",
+      "path": "data/ai-provider-model-source-cache.json",
+      "useFor": "Machine-readable public-safe provider/model source URL cache and recheck requirements."
     },
     {
       "title": "Heffl API v2 Task Assignment And Linking",

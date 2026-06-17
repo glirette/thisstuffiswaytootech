@@ -29,6 +29,8 @@ Canonical files:
 Current official source families seeded here:
 
 - OpenAI API Responses: https://developers.openai.com/api/reference/responses/overview/
+- AI provider/model selection source trail: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/ai-provider-model-selection-source-trail.md
+- Machine-readable AI provider/model source cache: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/ai-provider-model-source-cache.json
 - Azure Functions: https://learn.microsoft.com/en-us/azure/azure-functions/
 - Azure Communication Services Virtual Visits + Bookings: https://github.com/Azure-Samples/communication-services-virtual-visits-js
 - Azure Communication UI Library: https://azure.github.io/communication-ui-library/
@@ -46,5 +48,6 @@ Current public-safe posture note:
 - For a first-party booking page, use Microsoft Graph from backend code to read services/staff availability and create customers/appointments; keep Microsoft Bookings as the scheduling record, not just an iframe.
 - Keep focused appointment/session deployments separate from unrelated public-site codebases; use thin route/handoff integration unless deliberately replacing the session app.
 - For Heffl API v2 task work, use the official docs source trail before guessing assignment/link fields: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/heffl-api-v2-task-assignment-linking.md
+- For AI model routing, check public provider/model source trails first; official provider docs and fresh authenticated catalogs control model-name, context-window, pricing, and capability claims. Keep private routing and spend policy out of this public cache.
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.

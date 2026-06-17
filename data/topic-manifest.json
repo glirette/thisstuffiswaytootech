@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-15",
+  "dateModified": "2026-06-16",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -11,12 +11,29 @@
       "label": "AI API Documentation",
       "publicScope": "Official API docs, model/API surface changes, source links, and public-safe implementation gotchas.",
       "starterSources": [
-        "openai-responses-api-reference"
+        "openai-responses-api-reference",
+        "ai-provider-model-selection-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
         "account keys or organization IDs",
         "private prompts or business-specific automation recipes"
+      ]
+    },
+    {
+      "id": "ai-model-selection-sources",
+      "label": "AI Model Selection Sources",
+      "publicScope": "Official provider model docs, pricing-doc pointers, authenticated-catalog refresh posture, and public-safe model/source cache shape.",
+      "starterSources": [
+        "ai-provider-model-selection-source-trail",
+        "openai-model-release-rumor-checks"
+      ],
+      "mustNotInclude": [
+        "private provider routing logic",
+        "account keys or organization IDs",
+        "private account balances or entitlements",
+        "private prompts or business-specific automation recipes",
+        "customer payloads"
       ]
     },
     {

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "0.1",
+  "reviewedAt": "2026-06-16",
+  "publicBoundary": "Public-safe provider/model source cache. This is not a private routing policy, account entitlement record, pricing ledger, secret store, customer-data source, or provider-worker implementation guide.",
+  "providers": [
+    {
+      "id": "openai",
+      "label": "OpenAI",
+      "sourceType": "official_public_docs",
+      "officialSourceUrls": [
+        "https://platform.openai.com/docs/models",
+        "https://platform.openai.com/docs/pricing",
+        "https://platform.openai.com/docs/api-reference",
+        "https://developers.openai.com/"
+      ],
+      "cacheUse": [
+        "Check officially documented model names and model classes before relying on a model label.",
+        "Check official pricing before making cost-tier claims.",
+        "Use official docs before treating a model as suitable for coding, reasoning, tools, or long-context work."
+      ],
+      "mustRecheckBefore": [
+        "using a newly named OpenAI model in automation",
+        "publishing or acting on pricing/context-window claims",
+        "making production or budget decisions from cached model attributes"
+      ],
+      "snapshotStatus": "public-doc-links-cached",
+      "observations": [
+        "OpenAI model facts are volatile; official docs control.",
+        "Social rumors or internal shorthand should not be used as operational proof."
+      ]
+    },
+    {
+      "id": "anthropic",
+      "label": "Anthropic",
+      "sourceType": "official_public_docs",
+      "officialSourceUrls": [
+        "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+        "https://docs.anthropic.com/en/api/messages",
+        "https://www.anthropic.com/pricing"
+      ],
+      "cacheUse": [
+        "Check officially documented Claude model families and message API behavior.",
+        "Check official pricing before making cost-tier claims.",
+        "Use higher-capability Claude-family models only when task risk justifies the spend."
+      ],
+      "mustRecheckBefore": [
+        "routing automated review to a specific Claude model",
+        "publishing or acting on pricing/context-window claims",
+        "assuming availability through an aggregator"
+      ],
+      "snapshotStatus": "public-doc-links-cached",
+      "observations": [
+        "Direct Anthropic availability and aggregator availability are different claims.",
+        "Official Anthropic docs control direct API model behavior."
+      ]
+    },
+    {
+      "id": "straico",
+      "label": "Straico",
+      "sourceType": "aggregator_catalog",
+      "officialSourceUrls": [
+        "https://api.straico.com/v2/models",
+        "https://api.straico.com/v2/chat/completions"
+      ],
+      "cacheUse": [
+        "Refresh an authenticated model catalog before routing by model id through Straico.",
+        "Preserve the underlying model perspective when using Straico-mediated multi-model review.",
+        "Use cheap models for well-defined tasks only after task-quality checks prove the result is good enough."
+      ],
+      "mustRecheckBefore": [
+        "routing work to a specific Straico model id",
+        "claiming a model family is currently available through Straico",
+        "using cached catalog data for cost or quality decisions"
+      ],
+      "snapshotStatus": "authenticated-catalog-required",
+      "observations": [
+        "Unauthenticated GET /v2/models returned HTTP 401 when checked on 2026-06-16.",
+        "Private account entitlements, model list, balances, prices, and usage limits must not be committed here."
+      ]
+    }
+  ]
+}

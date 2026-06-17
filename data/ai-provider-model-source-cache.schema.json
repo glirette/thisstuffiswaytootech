@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Provider Model Source Cache",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "reviewedAt",
+    "publicBoundary",
+    "providers"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "reviewedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "publicBoundary": {
+      "type": "string"
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "sourceType",
+          "officialSourceUrls",
+          "cacheUse",
+          "mustRecheckBefore"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "sourceType": {
+            "type": "string",
+            "enum": [
+              "official_public_docs",
+              "authenticated_model_catalog",
+              "aggregator_catalog"
+            ]
+          },
+          "officialSourceUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cacheUse": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mustRecheckBefore": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "snapshotStatus": {
+            "type": "string"
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
