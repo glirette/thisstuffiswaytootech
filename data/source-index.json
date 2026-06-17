@@ -97,6 +97,31 @@
       ]
     },
     {
+      "id": "github-repo-and-actions-governance-source-trail",
+      "title": "GitHub Repository And Actions Governance Source Trail",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-16",
+      "urls": [
+        "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches",
+        "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        "https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions",
+        "https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#permissions",
+        "https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning",
+        "https://docs.github.com/en/code-security/dependabot",
+        "https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning"
+      ],
+      "supports": [
+        "A public-safe source trail for GitHub branch protection, rulesets, required status checks, Actions permissions, Actions security hardening, secret scanning, Dependabot, and code scanning.",
+        "A source trail for separating public GitHub best-practice references from private repository governance policy.",
+        "A source trail for review-gated automation that writes branches or draft PRs."
+      ],
+      "doesNotProve": [
+        "That a private repository currently has a specific branch protection rule, ruleset, status check, secret scanning setting, Dependabot configuration, or code scanning setup.",
+        "That a private self-hosted runner is isolated, patched, or configured safely.",
+        "That any private workflow is safe without reviewing its current YAML, secrets, permissions, and runner context."
+      ]
+    },
+    {
       "id": "azure-functions-docs",
       "title": "Azure Functions Documentation",
       "sourceType": "official_vendor_docs",
@@ -349,6 +374,11 @@
       "title": "AI Provider Model Source Cache",
       "path": "data/ai-provider-model-source-cache.json",
       "useFor": "Machine-readable public-safe provider/model source URL cache and recheck requirements."
+    },
+    {
+      "title": "GitHub Repository And Actions Governance Source Trail",
+      "path": "docs/github-repo-and-actions-governance-source-trail.md",
+      "useFor": "Public-safe source trail for GitHub branch/ruleset, Actions security, secret scanning, Dependabot, and code scanning governance references."
     },
     {
       "title": "Heffl API v2 Task Assignment And Linking",

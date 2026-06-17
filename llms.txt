@@ -37,6 +37,7 @@ Current official source families seeded here:
 - Microsoft Graph Bookings API: https://learn.microsoft.com/en-us/graph/api/resources/booking-api-overview
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - GitHub repository READMEs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+- GitHub repository and Actions governance source trail: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/github-repo-and-actions-governance-source-trail.md
 - Heffl API v2 task assignment, deal linking, and user listing: https://docs.heffl.com/api-v2-reference/objects/create-task.md
 
 Current public-safe posture note:
@@ -49,5 +50,6 @@ Current public-safe posture note:
 - Keep focused appointment/session deployments separate from unrelated public-site codebases; use thin route/handoff integration unless deliberately replacing the session app.
 - For Heffl API v2 task work, use the official docs source trail before guessing assignment/link fields: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/heffl-api-v2-task-assignment-linking.md
 - For AI model routing, check public provider/model source trails first; official provider docs and fresh authenticated catalogs control model-name, context-window, pricing, and capability claims. Keep private routing and spend policy out of this public cache.
+- For GitHub governance, use official GitHub docs for branch protection, rulesets, required checks, Actions permissions/security, secret scanning, Dependabot, and code scanning before claiming a repo is hardened.
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.

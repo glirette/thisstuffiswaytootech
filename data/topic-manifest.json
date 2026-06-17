@@ -90,9 +90,10 @@
     {
       "id": "public-repo-documentation",
       "label": "Public Repository Documentation",
-      "publicScope": "README, llms.txt, manifest, source index, and artifact index patterns for public source trails.",
+      "publicScope": "README, llms.txt, manifest, source index, artifact index patterns, GitHub repository governance references, and GitHub Actions security sources for public source trails.",
       "starterSources": [
-        "github-readme-docs"
+        "github-readme-docs",
+        "github-repo-and-actions-governance-source-trail"
       ],
       "mustNotInclude": [
         "private repo contents",
