@@ -99,6 +99,31 @@ This does not prove:
 - that a model available directly from OpenAI or Anthropic is also available through Straico;
 - that a cached authenticated catalog remains current.
 
+### xAI / Grok
+
+Use xAI's official REST API documentation before relying on Grok model identifiers, request shape, or pricing/catalog metadata.
+
+Current source starting points:
+
+- xAI API reference overview: https://docs.x.ai/docs/api-reference
+- xAI models endpoint: https://docs.x.ai/developers/rest-api-reference/inference/models
+- xAI chat completions endpoint: https://docs.x.ai/developers/rest-api-reference/inference/chat
+
+The official REST surface is OpenAI-compatible at `https://api.x.ai/v1`. Use `GET /v1/models` for a fresh account-visible catalog and `POST /v1/chat/completions` for chat completions through reviewed private worker code.
+
+This supports public-safe checks such as:
+
+- whether the xAI API surface is reachable with the expected base URL and authorization pattern;
+- whether a fresh catalog lists the model id a private router wants to use;
+- whether a provider adapter should treat xAI as a direct provider lane instead of an aggregator.
+
+This does not prove:
+
+- private account balance, entitlements, or usage limits;
+- that a cached Grok model list remains current;
+- that a specific Grok model is the right economic choice for a private work item;
+- that a private runner should spend on xAI without the private routing policy allowing it.
+
 ## Model Selection Rule For Consumers
 
 Consumers should use this source trail as a starting point, then apply their own private routing rules:

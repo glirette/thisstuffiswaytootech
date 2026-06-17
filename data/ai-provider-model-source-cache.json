@@ -77,6 +77,31 @@
         "Unauthenticated GET /v2/models returned HTTP 401 when checked on 2026-06-16.",
         "Private account entitlements, model list, balances, prices, and usage limits must not be committed here."
       ]
+    },
+    {
+      "id": "xai",
+      "label": "xAI / Grok",
+      "sourceType": "official_public_docs",
+      "officialSourceUrls": [
+        "https://docs.x.ai/docs/api-reference",
+        "https://docs.x.ai/developers/rest-api-reference/inference/models",
+        "https://docs.x.ai/developers/rest-api-reference/inference/chat"
+      ],
+      "cacheUse": [
+        "Check official xAI API documentation before relying on model names, endpoints, pricing metadata, or request shape.",
+        "Use GET /v1/models for a fresh model catalog before routing automated work to a specific Grok model.",
+        "Use POST /v1/chat/completions only through reviewed provider-worker code that preserves prompts, responses, and spend posture in private operational records."
+      ],
+      "mustRecheckBefore": [
+        "routing automated work to a specific Grok model id",
+        "publishing or acting on pricing/context-window claims",
+        "enabling direct execution from a new runner or worker adapter"
+      ],
+      "snapshotStatus": "public-doc-links-cached",
+      "observations": [
+        "Official xAI docs describe an OpenAI-compatible REST surface under https://api.x.ai/v1.",
+        "Private account balances, entitlements, API keys, and usage limits must not be committed here."
+      ]
     }
   ]
 }
