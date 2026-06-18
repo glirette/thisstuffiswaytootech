@@ -108,20 +108,26 @@ Current source starting points:
 - xAI API reference overview: https://docs.x.ai/docs/api-reference
 - xAI models endpoint: https://docs.x.ai/developers/rest-api-reference/inference/models
 - xAI chat completions endpoint: https://docs.x.ai/developers/rest-api-reference/inference/chat
+- xAI Batch API: https://docs.x.ai/developers/advanced-api-usage/batch-api
+- xAI pricing, including Batch API pricing: https://docs.x.ai/developers/pricing
 
 The official REST surface is OpenAI-compatible at `https://api.x.ai/v1`. Use `GET /v1/models` for a fresh account-visible catalog and `POST /v1/chat/completions` for chat completions through reviewed private worker code.
+
+The official Batch API docs describe a background-processing lane for large request volumes where immediate response is not required. The source trail supports treating xAI batch as a distinct async/bulk route from real-time chat completions, with lower pricing and separate operational monitoring. Use official pricing docs before making cost claims.
 
 This supports public-safe checks such as:
 
 - whether the xAI API surface is reachable with the expected base URL and authorization pattern;
 - whether a fresh catalog lists the model id a private router wants to use;
 - whether a provider adapter should treat xAI as a direct provider lane instead of an aggregator.
+- whether a batch route is appropriate for high-volume, latency-insensitive work rather than real-time requests.
 
 This does not prove:
 
 - private account balance, entitlements, or usage limits;
 - that a cached Grok model list remains current;
 - that a specific Grok model is the right economic choice for a private work item;
+- that Batch API pricing, rate limits, or completion timing remain unchanged after the checked date;
 - that a private runner should spend on xAI without the private routing policy allowing it.
 
 ## Model Selection Rule For Consumers
