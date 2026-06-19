@@ -296,6 +296,46 @@
       ]
     },
     {
+      "id": "github-actions-workflow-dispatch",
+      "title": "GitHub Actions Workflow Dispatch",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-15",
+      "urls": [
+        "https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_dispatch",
+        "https://cli.github.com/manual/gh_workflow_run"
+      ],
+      "supports": [
+        "Official GitHub documentation for manually dispatched Actions workflows.",
+        "A source trail for the default-branch requirement that affects new workflow_dispatch files before they can be manually dispatched.",
+        "A source trail for GitHub CLI workflow dispatch posture."
+      ],
+      "doesNotProve": [
+        "That a private workflow, runner, token, or repository is configured correctly.",
+        "That a new workflow should be merged without review just to make it dispatchable.",
+        "That workflow-dispatch behavior will never change."
+      ]
+    },
+    {
+      "id": "azure-cli-global-output-options",
+      "title": "Azure CLI Global Output Options",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-15",
+      "urls": [
+        "https://learn.microsoft.com/en-us/cli/azure/reference-index",
+        "https://learn.microsoft.com/en-us/cli/azure/format-output-azure-cli"
+      ],
+      "supports": [
+        "Official Microsoft documentation for Azure CLI global parameters and output formatting.",
+        "A source trail for using output controls and --only-show-errors in automation.",
+        "A source trail for separating JSON-returning CLI commands from exit-code-only action commands."
+      ],
+      "doesNotProve": [
+        "That warnings should always be hidden.",
+        "That every Azure CLI command returns JSON on success.",
+        "That private Azure credentials, accounts, subscriptions, tenants, or endpoints are configured correctly."
+      ]
+    },
+    {
       "id": "github-readme-docs",
       "title": "GitHub Documentation For Repository READMEs",
       "sourceType": "official_project_docs",
@@ -384,6 +424,11 @@
       "title": "Heffl API v2 Task Assignment And Linking",
       "path": "docs/heffl-api-v2-task-assignment-linking.md",
       "useFor": "Public-safe source trail for Heffl API v2 task assignment, task linking, task listing, and user listing fields."
+    },
+    {
+      "title": "GitHub Actions Workflow Dispatch And Azure CLI Automation Output",
+      "path": "docs/github-actions-workflow-dispatch-azure-cli-automation.md",
+      "useFor": "Public-safe source trail for GitHub workflow_dispatch default-branch behavior and Azure CLI output parsing posture."
     },
     {
       "title": "llms.txt",
