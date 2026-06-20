@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-20",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -94,6 +94,27 @@
         "That a cached price, context window, or model list remains current.",
         "That a private automation router should use one specific model for a private task.",
         "Private account balances, entitlements, prompts, provider-worker implementation, or internal spend policy."
+      ]
+    },
+    {
+      "id": "public-source-openai-lane-contract",
+      "title": "Public Source OpenAI Lane Contract",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-06-20",
+      "urls": [
+        "https://github.com/glirette/NotaryGeekPublicKnowledgeWorker",
+        "https://github.com/glirette/thisstuffiswaytootech",
+        "https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/public-source-openai-lane-contract.md"
+      ],
+      "supports": [
+        "A public-safe packet and logging contract for OpenAI-backed source research across public GoodWare / glirette repositories.",
+        "The audited distinction between NotaryGeekPublicKnowledgeWorker as the current executable public-knowledge worker and thisstuffiswaytootech as a static public technical source cache.",
+        "A safety rule that public-source lane reuse is not key sharing, private routing, or automatic publication."
+      ],
+      "doesNotProve": [
+        "That thisstuffiswaytootech currently has an executable OpenAI runtime or queue consumer.",
+        "That any private account key, quota, entitlement, billing policy, or provider-worker implementation can be inferred.",
+        "That public-source provider outputs are publishable without review."
       ]
     },
     {
@@ -414,6 +435,11 @@
       "title": "AI Provider Model Source Cache",
       "path": "data/ai-provider-model-source-cache.json",
       "useFor": "Machine-readable public-safe provider/model source URL cache and recheck requirements."
+    },
+    {
+      "title": "Public Source OpenAI Lane Contract",
+      "path": "docs/public-source-openai-lane-contract.md",
+      "useFor": "Public-safe packet, logging, dry-run, and review contract for OpenAI-backed source research across public repositories."
     },
     {
       "title": "GitHub Repository And Actions Governance Source Trail",
