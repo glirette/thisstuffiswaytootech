@@ -336,6 +336,29 @@
       ]
     },
     {
+      "id": "automation-control-plane-source-trail",
+      "title": "Automation Control Plane Source Trail",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-06-21",
+      "urls": [
+        "https://learn.microsoft.com/en-us/rest/api/azure/devops/pipelines/runs/run-pipeline?view=azure-devops-rest-7.1",
+        "https://learn.microsoft.com/en-us/cli/azure/pipelines?view=azure-cli-latest",
+        "https://docs.temporal.io/",
+        "https://docs.dagger.io/",
+        "https://kestra.io/docs"
+      ],
+      "supports": [
+        "A public-safe source trail for Azure DevOps REST and CLI run orchestration references.",
+        "A source trail for treating Azure DevOps as one backend behind a higher-level control layer instead of making every operator depend directly on CLI behavior.",
+        "A public-safe starting point for comparing open-source orchestration candidates such as Temporal, Dagger, and Kestra."
+      ],
+      "doesNotProve": [
+        "That a private Azure DevOps organization, token, runner, pipeline, or service connection is configured correctly.",
+        "That Azure DevOps should be replaced.",
+        "That any one open-source orchestration engine is the right fit without a separate current-source review."
+      ]
+    },
+    {
       "id": "github-readme-docs",
       "title": "GitHub Documentation For Repository READMEs",
       "sourceType": "official_project_docs",
@@ -429,6 +452,11 @@
       "title": "GitHub Actions Workflow Dispatch And Azure CLI Automation Output",
       "path": "docs/github-actions-workflow-dispatch-azure-cli-automation.md",
       "useFor": "Public-safe source trail for GitHub workflow_dispatch default-branch behavior and Azure CLI output parsing posture."
+    },
+    {
+      "title": "Automation Control Plane Source Trail",
+      "path": "docs/automation-control-plane-source-trail.md",
+      "useFor": "Public-safe source trail for Azure DevOps REST/CLI orchestration and open-source workflow control-plane candidates."
     },
     {
       "title": "llms.txt",
