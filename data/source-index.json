@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-21",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -336,6 +336,26 @@
       ]
     },
     {
+      "id": "windows-explorer-default-shell",
+      "title": "Windows Explorer As The Default Windows Shell",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-06-21",
+      "urls": [
+        "https://learn.microsoft.com/en-us/windows/configuration/shell-launcher/",
+        "https://support.microsoft.com/en-us/windows/file-explorer-in-windows-ef370130-1cca-9dc5-e0df-2f7416fe1cb1"
+      ],
+      "supports": [
+        "A public-safe Microsoft source trail for treating Explorer.exe as the default Windows graphical shell in ordinary desktop Windows.",
+        "A source trail for distinguishing the Windows graphical shell from command-line shells such as PowerShell and Command Prompt.",
+        "A source trail for Shell Launcher scenarios where Windows Explorer can be replaced with a custom shell on supported special-purpose configurations."
+      ],
+      "doesNotProve": [
+        "That Microsoft will never change Windows shell architecture.",
+        "That a specific Windows build, kiosk image, enterprise desktop, or Windows Server/Core configuration currently uses Explorer as its active shell.",
+        "That File Explorer, the desktop, Start, taskbar, Widgets, or AI surfaces are implemented in one unchanged process boundary."
+      ]
+    },
+    {
       "id": "github-readme-docs",
       "title": "GitHub Documentation For Repository READMEs",
       "sourceType": "official_project_docs",
@@ -429,6 +449,11 @@
       "title": "GitHub Actions Workflow Dispatch And Azure CLI Automation Output",
       "path": "docs/github-actions-workflow-dispatch-azure-cli-automation.md",
       "useFor": "Public-safe source trail for GitHub workflow_dispatch default-branch behavior and Azure CLI output parsing posture."
+    },
+    {
+      "title": "Windows Explorer As The Default Windows Shell",
+      "path": "docs/windows-explorer-default-shell-source-trail.md",
+      "useFor": "Public-safe source trail for Windows Explorer as the default graphical shell, Shell Launcher replacement scenarios, and command-line versus graphical shell terminology."
     },
     {
       "title": "llms.txt",

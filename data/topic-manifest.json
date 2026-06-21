@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-21",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -130,6 +130,20 @@
         "Azure account, tenant, subscription, or resource identifiers",
         "private workflow recipes that reveal internal automation",
         "copyable private deployment runbooks"
+      ]
+    },
+    {
+      "id": "windows-shell-and-desktop",
+      "label": "Windows Shell And Desktop",
+      "publicScope": "Official Microsoft docs and public-safe notes for Windows Explorer, graphical shell behavior, Shell Launcher, kiosk shell replacement, and command-line versus graphical shell distinctions.",
+      "starterSources": [
+        "windows-explorer-default-shell"
+      ],
+      "mustNotInclude": [
+        "private endpoint values",
+        "private desktop or device inventory",
+        "customer device data",
+        "unsupported predictions about Windows shell changes"
       ]
     }
   ],
