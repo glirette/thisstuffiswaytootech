@@ -6,7 +6,7 @@ Topic: `github-actions-and-cli-automation`
 
 ## Public-Safe Conclusion
 
-When building GitHub Actions control-plane workflows, remember that manually dispatched workflows are controlled by GitHub's default-branch workflow discovery behavior. A new `workflow_dispatch` workflow may not be manually runnable from the GitHub API or CLI until the workflow file exists on the repository's default branch.
+When building GitHub Actions automation workflows, remember that manually dispatched workflows are controlled by GitHub's default-branch workflow discovery behavior. A new `workflow_dispatch` workflow may not be manually runnable from the GitHub API or CLI until the workflow file exists on the repository's default branch.
 
 When using Azure CLI from automation scripts, do not assume every successful command produces clean JSON. Some commands produce status text, warnings, progress, or empty output. Use Azure CLI global output controls, suppress nonessential warnings when appropriate, and separate JSON-returning commands from commands that should only be checked for exit code.
 
