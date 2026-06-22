@@ -119,17 +119,17 @@
     {
       "id": "github-actions-and-cli-automation",
       "label": "GitHub Actions And CLI Automation",
-      "publicScope": "Official docs and public-safe notes for GitHub Actions dispatch behavior, GitHub CLI workflow operation, Azure DevOps REST/CLI run orchestration, Azure CLI output formatting, and automation wrapper posture.",
+      "publicScope": "Official docs and public-safe notes for GitHub Actions dispatch behavior, GitHub CLI workflow operation, Azure DevOps REST/CLI pipeline-run references, and Azure CLI output formatting.",
       "starterSources": [
         "github-actions-workflow-dispatch",
         "azure-cli-global-output-options",
-        "automation-control-plane-source-trail"
+        "azure-devops-pipeline-run-source-trail"
       ],
       "mustNotInclude": [
         "private runner names or topology",
         "tokens or repository secrets",
         "Azure account, tenant, subscription, or resource identifiers",
-        "private workflow recipes that reveal internal automation",
+        "private workflow recipes, orchestration design, or queue payloads",
         "copyable private deployment runbooks"
       ]
     }
