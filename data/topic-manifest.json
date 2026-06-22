@@ -2,9 +2,10 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-21",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
+  "sourceCaptureChecklist": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-capture-checklist.json",
   "topics": [
     {
       "id": "ai-api-docs",
