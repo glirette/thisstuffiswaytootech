@@ -27,6 +27,18 @@ Each source record should say:
 - which public-safe topic it belongs to;
 - whether readers must re-check the official docs before acting.
 
+For the step-by-step capture workflow, use [Source Capture Checklist](source-capture-checklist.md). For machine-readable agent routing, use `data/source-capture-checklist.json`.
+
+## Index Updates
+
+When adding a reusable source note:
+
+- add or update the source record in `data/source-index.json`;
+- add the doc to `relatedFiles` in `data/source-index.json`;
+- add the source ID to an existing topic in `data/topic-manifest.json`, or create a new topic only when needed;
+- update `dateModified` in changed JSON files;
+- run `scripts/validate-source-cache.ps1`.
+
 ## Boundaries
 
 Do not publish:

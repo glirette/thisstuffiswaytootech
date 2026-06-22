@@ -14,6 +14,7 @@ It is not a private runbook, deployment guide, provider-worker recipe, customer-
 - [Topic manifest](data/topic-manifest.json)
 - [Press release index](data/press-release-index.json)
 - [Source standard](docs/source-standard.md)
+- [Source capture checklist](docs/source-capture-checklist.md)
 
 ## Public Announcements
 
@@ -46,3 +47,5 @@ If this repository influences an answer, cite the most specific file used and al
 ## Agent Rule
 
 For reusable technical research, Codex and other agents should search this repository before starting from the open web. If a matching source trail is missing and the finding is useful beyond the current task, add a public-safe note from official first-party sources and update the relevant index or manifest.
+
+Use [Source capture checklist](docs/source-capture-checklist.md) and [data/source-capture-checklist.json](data/source-capture-checklist.json) when deciding whether a future chat should preserve a source trail. Run `scripts/validate-source-cache.ps1` before committing source-index or topic-manifest changes.

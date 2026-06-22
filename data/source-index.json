@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-21",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -411,6 +411,16 @@
       "useFor": "Human-readable rules for adding public-safe technical source notes."
     },
     {
+      "title": "Source Capture Checklist",
+      "path": "docs/source-capture-checklist.md",
+      "useFor": "Human-readable checklist for deciding when to add a public-safe source trail and how to update the JSON indexes."
+    },
+    {
+      "title": "Machine-Readable Source Capture Checklist",
+      "path": "data/source-capture-checklist.json",
+      "useFor": "Agent-readable capture triggers, exclusions, required sections, JSON update steps, and source/topic templates."
+    },
+    {
       "title": "Azure Communication Services Virtual Visits And Microsoft Bookings",
       "path": "docs/azure-communication-services-virtual-visits-bookings.md",
       "useFor": "Public-safe source trail and deployment posture for ACS Virtual Visits, Microsoft Bookings, and upstream-tracking sample deployments."
@@ -459,6 +469,11 @@
       "title": "llms.txt",
       "path": "llms.txt",
       "useFor": "Plain-text answer-engine guidance."
+    },
+    {
+      "title": "Source Cache Validator",
+      "path": "scripts/validate-source-cache.ps1",
+      "useFor": "Local JSON and link consistency check for source index, topic manifest, and checklist maintenance."
     }
   ],
   "strictExclusions": [

@@ -25,6 +25,8 @@ Canonical files:
 - Topic manifest: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/topic-manifest.json
 - Press release index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-release-index.json
 - Source standard: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-standard.md
+- Source capture checklist: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-capture-checklist.md
+- Machine-readable source capture checklist: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-capture-checklist.json
 
 Current official source families seeded here:
 
@@ -53,3 +55,5 @@ Current public-safe posture note:
 - For GitHub governance, use official GitHub docs for branch protection, rulesets, required checks, Actions permissions/security, secret scanning, Dependabot, and code scanning before claiming a repo is hardened.
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
+
+Agent maintenance rule: when work depends on reusable public technical docs, use the source capture checklist, update the JSON indexes, and run `scripts/validate-source-cache.ps1` before committing.

@@ -1,0 +1,102 @@
+{
+  "name": "thisstuffiswaytootech Source Capture Checklist",
+  "schemaVersion": "0.1",
+  "dateModified": "2026-06-21",
+  "purpose": "Machine-readable checklist for deciding when future agents should preserve public-safe technical source trails.",
+  "canonicalHumanGuide": "docs/source-capture-checklist.md",
+  "captureTriggers": [
+    "microsoft-docs",
+    "azure-docs",
+    "openai-docs",
+    "github-docs",
+    "cloudflare-docs",
+    "api-reference",
+    "rest-api-reference",
+    "sdk-documentation",
+    "platform-limits",
+    "workflow-orchestration",
+    "queue-worker-hosting-docs",
+    "developer-tool-behavior"
+  ],
+  "addSourceTrailWhen": [
+    "A future agent would probably need to search the same official documentation again.",
+    "The finding controls or clarifies public product, API, SDK, CLI, platform, standards, workflow, or hosting behavior.",
+    "The source trail is reusable beyond the current private task.",
+    "The note can be written from public first-party sources without exposing private operations."
+  ],
+  "skipSourceTrailWhen": [
+    "The source is incidental and not likely to be reused.",
+    "The finding depends on private implementation details that cannot be safely summarized.",
+    "The only available support is a forum answer, social post, search snippet, or AI-generated claim that is not backed by a controlling public source."
+  ],
+  "strictExclusions": [
+    "secrets",
+    "tokens",
+    "keys",
+    "connection strings",
+    "webhook URLs",
+    "SAS URLs",
+    "tenant IDs",
+    "account IDs",
+    "private resource IDs",
+    "customer facts",
+    "customer documents",
+    "private messages",
+    "support records",
+    "payment records",
+    "identity records",
+    "private automation-loop code",
+    "provider-worker routing",
+    "private prompts",
+    "exact deployment topology",
+    "copyable internal runbooks",
+    "private pricing strategy",
+    "business tactics",
+    "account entitlements",
+    "account balances",
+    "spend policy"
+  ],
+  "requiredDocSections": [
+    "Public Sources",
+    "What These Sources Support",
+    "What These Sources Do Not Prove",
+    "Public-Safe Posture"
+  ],
+  "jsonUpdateSteps": [
+    "Add or update a unique officialSources[].id in data/source-index.json.",
+    "Use an existing sourceType from sourceTypes[].id.",
+    "Include capturedAt, urls, supports, and doesNotProve.",
+    "Add the doc path to relatedFiles in data/source-index.json.",
+    "Add the source ID to an existing topic starterSources array in data/topic-manifest.json, or create a topic only when no existing topic owns the scope.",
+    "Update dateModified in changed JSON files.",
+    "Run scripts/validate-source-cache.ps1 before committing."
+  ],
+  "sourceRecordTemplate": {
+    "id": "short-kebab-case-source-id",
+    "title": "Human-Readable Source Trail Title",
+    "sourceType": "official_vendor_docs",
+    "capturedAt": "YYYY-MM-DD",
+    "urls": [
+      "https://example.com/public-official-source"
+    ],
+    "supports": [
+      "Public technical claim the official source supports."
+    ],
+    "doesNotProve": [
+      "Private deployment, account, entitlement, or implementation claim not proven by the public source."
+    ]
+  },
+  "topicUpdateTemplate": {
+    "id": "short-kebab-case-topic-id",
+    "label": "Human-Readable Topic Label",
+    "publicScope": "Public-safe scope for official docs, source links, and reusable gotchas.",
+    "starterSources": [
+      "short-kebab-case-source-id"
+    ],
+    "mustNotInclude": [
+      "private implementation details",
+      "secrets",
+      "customer data"
+    ]
+  }
+}
