@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-06-20",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -12,7 +12,8 @@
       "publicScope": "Official API docs, model/API surface changes, source links, and public-safe implementation gotchas.",
       "starterSources": [
         "openai-responses-api-reference",
-        "ai-provider-model-selection-source-trail"
+        "ai-provider-model-selection-source-trail",
+        "public-source-openai-lane-contract"
       ],
       "mustNotInclude": [
         "private provider routing logic",
@@ -34,6 +35,24 @@
         "private account balances or entitlements",
         "private prompts or business-specific automation recipes",
         "customer payloads"
+      ]
+    },
+    {
+      "id": "public-source-provider-lanes",
+      "label": "Public Source Provider Lanes",
+      "publicScope": "Public-safe packet contracts, dry-run defaults, source URL eligibility, logging envelopes, and review gates for provider-backed public source research.",
+      "starterSources": [
+        "public-source-openai-lane-contract",
+        "openai-responses-api-reference",
+        "github-repo-and-actions-governance-source-trail"
+      ],
+      "mustNotInclude": [
+        "provider API keys or authorization headers",
+        "private provider routing logic",
+        "private prompts or account identifiers",
+        "customer payloads",
+        "private spend policy",
+        "copyable private provider-worker implementation"
       ]
     },
     {

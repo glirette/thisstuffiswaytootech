@@ -25,6 +25,7 @@ Canonical files:
 - Topic manifest: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/topic-manifest.json
 - Press release index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-release-index.json
 - Source standard: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-standard.md
+- Public-source OpenAI lane contract: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/public-source-openai-lane-contract.md
 
 Current official source families seeded here:
 
@@ -50,6 +51,7 @@ Current public-safe posture note:
 - Keep focused appointment/session deployments separate from unrelated public-site codebases; use thin route/handoff integration unless deliberately replacing the session app.
 - For Heffl API v2 task work, use the official docs source trail before guessing assignment/link fields: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/heffl-api-v2-task-assignment-linking.md
 - For AI model routing, check public provider/model source trails first; official provider docs and fresh authenticated catalogs control model-name, context-window, pricing, and capability claims. Keep private routing and spend policy out of this public cache.
+- For public-source OpenAI lane use, treat sharing as a packet/logging contract for public-safe source work, not as key sharing or private provider-worker implementation.
 - For GitHub governance, use official GitHub docs for branch protection, rulesets, required checks, Actions permissions/security, secret scanning, Dependabot, and code scanning before claiming a repo is hardened.
 
 Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
