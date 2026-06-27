@@ -374,6 +374,31 @@
       ]
     },
     {
+      "id": "mautic-7-release-source-trail",
+      "title": "Mautic 7 Release Source Trail",
+      "sourceType": "official_project_docs",
+      "capturedAt": "2026-06-26",
+      "urls": [
+        "https://github.com/mautic/mautic/releases",
+        "https://github.com/mautic/mautic/releases/tag/7.1.0",
+        "https://github.com/mautic/mautic/releases/tag/7.1.2",
+        "https://github.com/mautic/mautic/releases/tag/7.2.0-rc",
+        "https://docs.mautic.org/en/7.1/getting_started/how_to_update_mautic.html",
+        "https://docs.mautic.org/en/7.0/configuration/command_line_interface.html"
+      ],
+      "supports": [
+        "A public-safe source trail for checking Mautic 7 release posture before relying on old Mautic 4/5/6 assumptions.",
+        "A source trail for distinguishing stable Mautic release tags from release-candidate pre-releases.",
+        "A Mautic-only posture that latest stable Mautic may be desirable while release candidates remain testing-only unless explicitly approved."
+      ],
+      "doesNotProve": [
+        "That any private Mautic installation is configured, healthy, backed up, or safe to update.",
+        "That a private install is Composer-based, package-based, or UI-update capable.",
+        "That Mautic latest-stable posture applies to n8n, PHP, databases, operating systems, or other infrastructure.",
+        "That a release candidate should be used in production."
+      ]
+    },
+    {
       "id": "heffl-api-v2-task-assignment-linking",
       "title": "Heffl API v2 Task Assignment And Linking",
       "sourceType": "official_vendor_docs",
@@ -439,6 +464,11 @@
       "title": "GitHub Repository And Actions Governance Source Trail",
       "path": "docs/github-repo-and-actions-governance-source-trail.md",
       "useFor": "Public-safe source trail for GitHub branch/ruleset, Actions security, secret scanning, Dependabot, and code scanning governance references."
+    },
+    {
+      "title": "Mautic 7 Release Source Trail",
+      "path": "docs/mautic-7-release-source-trail.md",
+      "useFor": "Public-safe source trail for Mautic 7 stable release, security release, and release-candidate posture."
     },
     {
       "title": "Heffl API v2 Task Assignment And Linking",

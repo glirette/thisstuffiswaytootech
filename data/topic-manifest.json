@@ -117,6 +117,21 @@
       ]
     },
     {
+      "id": "mautic-7-release-and-automation-sources",
+      "label": "Mautic 7 Release And Automation Sources",
+      "publicScope": "Official Mautic 7 release notes, update documentation, CLI references, and public-safe version-specific cautions for Mautic only.",
+      "starterSources": [
+        "mautic-7-release-source-trail"
+      ],
+      "mustNotInclude": [
+        "private Mautic URLs or account details",
+        "Mautic admin credentials or API keys",
+        "private contact records, campaign contents, customer messages, or lead data",
+        "copyable private automation workflows",
+        "claims that Mautic latest-stable policy applies to n8n, PHP, databases, operating systems, or other infrastructure"
+      ]
+    },
+    {
       "id": "github-actions-and-cli-automation",
       "label": "GitHub Actions And CLI Automation",
       "publicScope": "Official docs and public-safe notes for GitHub Actions dispatch behavior, GitHub CLI workflow operation, Azure DevOps REST/CLI pipeline-run references, and Azure CLI output formatting.",
