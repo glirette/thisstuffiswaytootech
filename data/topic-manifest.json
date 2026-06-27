@@ -128,7 +128,7 @@
         "Mautic admin credentials or API keys",
         "private contact records, campaign contents, customer messages, or lead data",
         "copyable private automation workflows",
-        "claims that Mautic latest-stable policy applies to n8n, PHP, databases, operating systems, or other infrastructure"
+        "private update cadence, production-adoption, or operating-position decisions"
       ]
     },
     {
