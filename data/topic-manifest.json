@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-07-03",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -39,9 +39,10 @@
     {
       "id": "serverless-workers-and-functions",
       "label": "Serverless Workers And Functions",
-      "publicScope": "Official docs and public-safe notes for Azure Functions, Cloudflare Workers, event triggers, queues, and deployment concepts.",
+      "publicScope": "Official docs and public-safe notes for Azure Functions, Cloudflare Workers, PowerShell runtime lifecycle, event triggers, queues, and deployment concepts.",
       "starterSources": [
         "azure-functions-docs",
+        "powershell-support-lifecycle",
         "cloudflare-workers-docs"
       ],
       "mustNotInclude": [
