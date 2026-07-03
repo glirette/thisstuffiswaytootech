@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-06-16",
+  "dateModified": "2026-07-03",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -137,6 +137,25 @@
       "doesNotProve": [
         "That any private Azure Function app is configured, deployed, secured, or billed a particular way.",
         "That a specific private runtime error is solved without checking the current code and logs."
+      ]
+    },
+    {
+      "id": "powershell-support-lifecycle",
+      "title": "PowerShell Support Lifecycle",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-07-03",
+      "urls": [
+        "https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle"
+      ],
+      "supports": [
+        "Official Microsoft documentation for PowerShell stable and Long Term Servicing release support.",
+        "A source trail for checking current PowerShell LTS version and support dates before runtime or automation decisions.",
+        "A public-safe reminder that host-specific runtime support must be checked separately before changing hosted platforms."
+      ],
+      "doesNotProve": [
+        "That any private host, runner, Azure Function, pipeline, container, or workstation supports a specific PowerShell version.",
+        "That a private script is compatible with PowerShell 7 or Windows PowerShell 5.1.",
+        "That a runtime upgrade is safe without tests."
       ]
     },
     {
@@ -484,6 +503,11 @@
       "title": "Azure DevOps Pipeline Run Source Trail",
       "path": "docs/azure-devops-pipeline-run-source-trail.md",
       "useFor": "Public-safe source trail for Azure DevOps REST/CLI pipeline-run references."
+    },
+    {
+      "title": "PowerShell Support Lifecycle Source Trail",
+      "path": "docs/powershell-support-lifecycle-source-trail.md",
+      "useFor": "Public-safe source trail for PowerShell LTS version and support-window checks before automation/runtime decisions."
     },
     {
       "title": "llms.txt",
