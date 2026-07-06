@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-03",
+  "dateModified": "2026-07-06",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -115,6 +115,21 @@
         "customer records or messages",
         "copyable private workflow implementation",
         "private operating tactics"
+      ]
+    },
+    {
+      "id": "external-provider-api-readiness",
+      "label": "External Provider API Readiness",
+      "publicScope": "Official documentation links and public-safe notes for read-only or token-only API readiness checks across external providers such as Mautic, n8n, DHL, FedEx, and Smarty.",
+      "starterSources": [
+        "external-provider-api-readiness-source-trail"
+      ],
+      "mustNotInclude": [
+        "private provider credentials or account IDs",
+        "private endpoint URLs or tenant details",
+        "customer payloads or shipment data",
+        "copyable private integration workflows",
+        "provider-worker routing or spend policy"
       ]
     },
     {

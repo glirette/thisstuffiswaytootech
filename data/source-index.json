@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-03",
+  "dateModified": "2026-07-06",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -418,6 +418,32 @@
       ]
     },
     {
+      "id": "external-provider-api-readiness-source-trail",
+      "title": "External Provider API Readiness Source Trail",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-07-06",
+      "urls": [
+        "https://docs.n8n.io/connect/n8n-api/authentication/",
+        "https://docs.n8n.io/connect/n8n-api/user/",
+        "https://developer.mautic.org/",
+        "https://devdocs.mautic.org/en/7.1/rest_api/authentication.html",
+        "https://devdocs.mautic.org/en/7.1/rest_api/users.html",
+        "https://developer.dhl.com/api-reference/dhl-express-mydhl-api",
+        "https://developer.fedex.com/api/en-us/catalog/authorization/docs.html",
+        "https://www.smarty.com/docs/mcp"
+      ],
+      "supports": [
+        "A public-safe source trail for checking official Mautic, n8n, DHL, FedEx, and Smarty API documentation before writing readiness probes or integration code.",
+        "A source trail for separating read-only/token-only API reachability checks from mutating provider actions.",
+        "A source trail for keeping provider credentials in environment variables, Azure app settings, or Key Vault rather than source code."
+      ],
+      "doesNotProve": [
+        "That any private provider account has working credentials, required entitlements, enabled products, or production access.",
+        "That a private endpoint, tenant, workspace, subscription, API key, OAuth client, or account setting is configured correctly.",
+        "That a readiness probe proves shipment, address validation, workflow execution, billing, CRM sync, or customer-intake behavior."
+      ]
+    },
+    {
       "id": "heffl-api-v2-task-assignment-linking",
       "title": "Heffl API v2 Task Assignment And Linking",
       "sourceType": "official_vendor_docs",
@@ -488,6 +514,11 @@
       "title": "Mautic 7 Release Source Trail",
       "path": "docs/mautic-7-release-source-trail.md",
       "useFor": "Public-safe source trail for Mautic 7 stable release, security release, and release-candidate posture."
+    },
+    {
+      "title": "External Provider API Readiness Source Trail",
+      "path": "docs/external-provider-api-readiness-source-trail.md",
+      "useFor": "Public-safe source trail for Mautic, n8n, DHL, FedEx, and Smarty API readiness documentation."
     },
     {
       "title": "Heffl API v2 Task Assignment And Linking",
