@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-06",
+  "dateModified": "2026-07-07",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -12,7 +12,8 @@
       "publicScope": "Official API docs, model/API surface changes, source links, and public-safe implementation gotchas.",
       "starterSources": [
         "openai-responses-api-reference",
-        "ai-provider-model-selection-source-trail"
+        "ai-provider-model-selection-source-trail",
+        "xai-voice-agent-api-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",

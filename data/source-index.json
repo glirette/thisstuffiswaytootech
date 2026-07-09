@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-06",
+  "dateModified": "2026-07-07",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -94,6 +94,29 @@
         "That a cached price, context window, or model list remains current.",
         "That a private automation router should use one specific model for a private task.",
         "Private account balances, entitlements, prompts, provider-worker implementation, or internal spend policy."
+      ]
+    },
+    {
+      "id": "xai-voice-agent-api-source-trail",
+      "title": "xAI Voice Agent API Source Trail",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-07-07",
+      "urls": [
+        "https://docs.x.ai/developers/model-capabilities/audio/voice-agent",
+        "https://docs.x.ai/developers/models/voice-agent-api",
+        "https://docs.x.ai/developers/model-capabilities/audio/ephemeral-tokens",
+        "https://docs.x.ai/developers/model-capabilities/audio/voice-agent/sip",
+        "https://docs.x.ai/llms.txt"
+      ],
+      "supports": [
+        "Official xAI documentation for Voice Agent API planning and current feature checks.",
+        "A source trail for realtime voice agent, WebSocket/WebRTC, ephemeral token, tester app, SIP, Twilio telephony, and pricing references.",
+        "A public-safe reminder to re-check xAI docs and account console access before implementation or production decisions."
+      ],
+      "doesNotProve": [
+        "That any private xAI account has API access, beta access, rate limits, or billing enabled.",
+        "That no-code Voice Agent Builder console settings are available or configured for a private account.",
+        "That a private voice intake, phone routing, notary, identity, payment, or customer-service workflow is safe to connect."
       ]
     },
     {
@@ -504,6 +527,11 @@
       "title": "AI Provider Model Source Cache",
       "path": "data/ai-provider-model-source-cache.json",
       "useFor": "Machine-readable public-safe provider/model source URL cache and recheck requirements."
+    },
+    {
+      "title": "xAI Voice Agent API Source Trail",
+      "path": "docs/xai-voice-agent-api-source-trail.md",
+      "useFor": "Public-safe source trail for xAI Voice Agent API, ephemeral token, pricing, and SIP/Twilio telephony documentation."
     },
     {
       "title": "GitHub Repository And Actions Governance Source Trail",
