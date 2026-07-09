@@ -34,4 +34,3 @@ Public-safe source trail for xAI Voice Agent API research. This note preserves o
 ## Public-Safe Implementation Posture
 
 Use these sources as a starting point for a browser-only prototype or source-verified planning note. Before operational use, re-check current xAI docs and the target account console, then keep secrets in an approved secret store and customer/private data out of prompts, logs, public repos, and source notes.
-
