@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-07",
+  "dateModified": "2026-08-01",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -100,22 +100,26 @@
       "id": "xai-voice-agent-api-source-trail",
       "title": "xAI Voice Agent API Source Trail",
       "sourceType": "official_vendor_docs",
-      "capturedAt": "2026-07-07",
+      "capturedAt": "2026-08-01",
       "urls": [
         "https://docs.x.ai/developers/model-capabilities/audio/voice-agent",
         "https://docs.x.ai/developers/models/voice-agent-api",
         "https://docs.x.ai/developers/model-capabilities/audio/ephemeral-tokens",
         "https://docs.x.ai/developers/model-capabilities/audio/voice-agent/sip",
+        "https://x.ai/news/grok-voice-think-fast-2",
+        "https://docs.x.ai/developers/rest-api-reference/inference/voice",
         "https://docs.x.ai/llms.txt"
       ],
       "supports": [
         "Official xAI documentation for Voice Agent API planning and current feature checks.",
         "A source trail for realtime voice agent, WebSocket/WebRTC, ephemeral token, tester app, SIP, Twilio telephony, and pricing references.",
+        "The official 2.0 announcement, August 5 grok-voice-latest alias migration, and public migration-testing posture.",
         "A public-safe reminder to re-check xAI docs and account console access before implementation or production decisions."
       ],
       "doesNotProve": [
         "That any private xAI account has API access, beta access, rate limits, or billing enabled.",
         "That no-code Voice Agent Builder console settings are available or configured for a private account.",
+        "That a saved agent follows a particular model alias or that 2.0 improves a private workflow without workload-specific testing.",
         "That a private voice intake, phone routing, notary, identity, payment, or customer-service workflow is safe to connect."
       ]
     },
