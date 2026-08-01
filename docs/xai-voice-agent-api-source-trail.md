@@ -1,7 +1,7 @@
 # xAI Voice Agent API Source Trail
 
 Captured: 2026-07-07
-Reviewed: 2026-07-30
+Reviewed: 2026-08-01
 
 ## Purpose
 
@@ -26,7 +26,7 @@ Public-safe source trail for xAI Voice Agent API research. This note preserves o
 - The SIP docs are the official pointer for phone-call integration, including SIP provider and Twilio-oriented setup.
 - xAI announced `grok-voice-think-fast-2.0` on 2026-07-29 at `$0.08` per audio minute and states that `grok-voice-latest` will move from `grok-voice-think-fast-1.0` to 2.0 on 2026-08-05.
 - xAI reports shorter sentences, one-question turns, less filler, faster first audio, and substantially better noisy and telephony-compressed transcription for 2.0. These are vendor claims that require workload-specific validation.
-- The current Voice inference API reference still documents `grok-voice-latest` as the default realtime model and lists 1.0 explicitly. A newly announced model may therefore appear in release material before every reference page and account console is updated.
+- As reviewed on 2026-08-01, the current Voice inference API reference documents `grok-voice-latest` as the default realtime model and explicitly lists both `grok-voice-think-fast-2.0` and `grok-voice-think-fast-1.0`.
 - The docs navigation includes tool and retrieval surfaces such as function calling, web search, X search, collections search, and remote MCP tools, but each tool surface must be re-checked in the current docs before use.
 
 ## What The Sources Do Not Prove

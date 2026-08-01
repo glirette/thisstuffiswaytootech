@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-07-30",
+  "dateModified": "2026-08-01",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -100,7 +100,7 @@
       "id": "xai-voice-agent-api-source-trail",
       "title": "xAI Voice Agent API Source Trail",
       "sourceType": "official_vendor_docs",
-      "capturedAt": "2026-07-30",
+      "capturedAt": "2026-08-01",
       "urls": [
         "https://docs.x.ai/developers/model-capabilities/audio/voice-agent",
         "https://docs.x.ai/developers/models/voice-agent-api",
