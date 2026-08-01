@@ -38,6 +38,21 @@
       ]
     },
     {
+      "id": "telecom-voice-and-messaging",
+      "label": "Telecom Voice And Messaging",
+      "publicScope": "Official provider documentation and public-safe architecture notes for DID routing, SIP trunking, voice agents, SMS/A2P, WhatsApp, diagnostics, rollback, and number lifecycle.",
+      "starterSources": [
+        "twilio-xai-telecom-deployment-source-trail",
+        "xai-voice-agent-api-source-trail"
+      ],
+      "mustNotInclude": [
+        "private phone-number inventories or provider identifiers",
+        "credentials, transfer destinations, or private prompts",
+        "raw calls, recordings, transcripts, or customer data",
+        "copyable private production topology"
+      ]
+    },
+    {
       "id": "serverless-workers-and-functions",
       "label": "Serverless Workers And Functions",
       "publicScope": "Official docs and public-safe notes for Azure Functions, Cloudflare Workers, PowerShell runtime lifecycle, event triggers, queues, and deployment concepts.",
