@@ -1,0 +1,46 @@
+{
+  "schema": "technical-public-authority-routing/v1",
+  "destination": "glirette/thisstuffiswaytootech",
+  "maxFeedAgeHours": 30,
+  "maxCandidateAgeHours": 72,
+  "maxSourceReviewAgeDays": 31,
+  "publishers": {
+    "openai": [
+      "https://developers.openai.com/",
+      "https://platform.openai.com/",
+      "https://openai.com/",
+      "https://help.openai.com/",
+      "https://github.com/openai/"
+    ],
+    "anthropic": ["https://docs.anthropic.com/", "https://www.anthropic.com/"],
+    "xai": ["https://docs.x.ai/", "https://github.com/xai-org/"],
+    "microsoft": [
+      "https://learn.microsoft.com/",
+      "https://github.com/Azure/",
+      "https://github.com/Azure-Samples/",
+      "https://github.com/MicrosoftDocs/"
+    ],
+    "github": ["https://docs.github.com/", "https://github.com/github/"],
+    "cloudflare": ["https://developers.cloudflare.com/", "https://github.com/cloudflare/"],
+    "mautic": ["https://docs.mautic.org/", "https://github.com/mautic/"],
+    "n8n": ["https://docs.n8n.io/", "https://github.com/n8n-io/"],
+    "heffl": ["https://docs.heffl.com/"],
+    "dhl": ["https://developer.dhl.com/"],
+    "fedex": ["https://developer.fedex.com/"],
+    "smarty": ["https://www.smarty.com/docs/"],
+    "standards": ["https://www.rfc-editor.org/", "https://www.w3.org/", "https://www.iso.org/"]
+  },
+  "routes": {
+    "ai-api-docs": ["openai", "anthropic", "xai", "standards"],
+    "ai-model-selection-sources": ["openai", "anthropic", "xai"],
+    "serverless-workers-and-functions": ["microsoft", "cloudflare"],
+    "azure-arc-run-command-operations": ["microsoft"],
+    "azure-communication-services-virtual-appointments": ["microsoft"],
+    "public-repo-documentation": ["github"],
+    "crm-and-work-management-apis": ["heffl"],
+    "external-provider-api-readiness": ["mautic", "n8n", "dhl", "fedex", "smarty"],
+    "mautic-7-release-and-automation-sources": ["mautic"],
+    "github-actions-and-cli-automation": ["github", "microsoft"]
+  }
+}
+
