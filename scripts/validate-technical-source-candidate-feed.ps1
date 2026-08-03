@@ -5,15 +5,55 @@ param(
   [string]$SourceIndexPath = "data/source-index.json",
   [int]$MaxFeedAgeHours = 30,
   [int]$MaxCandidateAgeHours = 72,
-  [int]$MaxSourceReviewAgeDays = 31
+  [int]$MaxSourceReviewAgeDays = 31,
+  [string]$NowUtc = ""
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$effectiveNowUtc = if ([string]::IsNullOrWhiteSpace($NowUtc)) {
+  [datetime]::UtcNow
+} else {
+  [datetime]::Parse($NowUtc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+}
 
 function Get-DeterministicDigest {
-  param([object]$Obj)
-  $json = $Obj | ConvertTo-Json -Depth 100 -Compress
+  param([object]$Candidate)
+  $canonical = [ordered]@{
+    schema = [string]$Candidate.schema
+    candidateId = [string]$Candidate.candidateId
+    destination = [string]$Candidate.destination
+    topicId = [string]$Candidate.topicId
+    title = [string]$Candidate.title
+    summary = [string]$Candidate.summary
+    reviewedAtUtc = ([datetime]$Candidate.reviewedAtUtc).ToUniversalTime().ToString('o')
+    recheckBeforeUse = [bool]$Candidate.recheckBeforeUse
+    sources = @($Candidate.sources | ForEach-Object {
+      [ordered]@{
+        url = [string]$_.url
+        title = [string]$_.title
+        publisher = [string]$_.publisher
+        kind = [string]$_.kind
+        reviewedAtUtc = ([datetime]$_.reviewedAtUtc).ToUniversalTime().ToString('o')
+        supports = [string]$_.supports
+      }
+    })
+    supports = @($Candidate.supports | ForEach-Object { [string]$_ })
+    doesNotProve = @($Candidate.doesNotProve | ForEach-Object { [string]$_ })
+    generatorEvidence = [ordered]@{
+      provider = [string]$Candidate.generatorEvidence.provider
+      authMode = [string]$Candidate.generatorEvidence.authMode
+      model = [string]$Candidate.generatorEvidence.model
+      runId = [string]$Candidate.generatorEvidence.runId
+      generatedAtUtc = ([datetime]$Candidate.generatorEvidence.generatedAtUtc).ToUniversalTime().ToString('o')
+      usage = [ordered]@{
+        inputTokens = [int]$Candidate.generatorEvidence.usage.inputTokens
+        outputTokens = [int]$Candidate.generatorEvidence.usage.outputTokens
+        reasoningTokens = [int]$Candidate.generatorEvidence.usage.reasoningTokens
+      }
+    }
+  }
+  $json = $canonical | ConvertTo-Json -Depth 20 -Compress
   $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
   $sha = [System.Security.Cryptography.SHA256]::Create()
   $hash = $sha.ComputeHash($bytes)
@@ -26,15 +66,30 @@ function Test-ValidDateTime {
 }
 
 function Get-AgeHours {
-  param([string]$UtcStr)
-  $dt = [datetime]::Parse($UtcStr, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
-  return ([datetime]::UtcNow - $dt).TotalHours
+  param([object]$UtcValue)
+  $dt = if ($UtcValue -is [datetime]) {
+    $UtcValue.ToUniversalTime()
+  } else {
+    [datetime]::Parse([string]$UtcValue, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+  }
+  return ($effectiveNowUtc - $dt).TotalHours
 }
 
 function Get-AgeDays {
-  param([string]$UtcStr)
-  $dt = [datetime]::Parse($UtcStr, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
-  return ([datetime]::UtcNow - $dt).TotalDays
+  param([object]$UtcValue)
+  $dt = if ($UtcValue -is [datetime]) {
+    $UtcValue.ToUniversalTime()
+  } else {
+    [datetime]::Parse([string]$UtcValue, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+  }
+  return ($effectiveNowUtc - $dt).TotalDays
+}
+
+function Assert-PublicSafeText {
+  param([string]$Text, [string]$Field)
+  if ($Text -match '[\x00-\x08\x0B\x0C\x0E-\x1F]') { throw "Control character in ${Field}" }
+  $secretOrPrivatePattern = '(?i)(blob\.core\.windows\.net|DefaultEndpointsProtocol=|AccountKey=|SharedAccessSignature=|Bearer\s+[A-Za-z0-9._~+/-]{12,}|[?&](?:sig|se|sp|sv|token|key)=|https?://(?:localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+))'
+  if ($Text -match $secretOrPrivatePattern) { throw "Private or credential-like content in ${Field}" }
 }
 
 function Assert-NoExtraProperties {
@@ -72,6 +127,8 @@ foreach ($cand in $feed.candidates) {
   if (-not $routes.ContainsKey($cand.topicId)) { throw "Unrouted topicId: $($cand.topicId)" }
   if ($cand.title.Length -lt 8 -or $cand.title.Length -gt 140) { throw "Bad title length" }
   if ($cand.summary.Length -lt 20 -or $cand.summary.Length -gt 1200) { throw "Bad summary length" }
+  Assert-PublicSafeText $cand.title "candidate.title"
+  Assert-PublicSafeText $cand.summary "candidate.summary"
   if (-not (Test-ValidDateTime $cand.reviewedAtUtc)) { throw "Bad reviewedAtUtc" }
   $candAge = Get-AgeHours $cand.reviewedAtUtc
   if ($candAge -gt $MaxCandidateAgeHours -or $candAge -lt -1) { throw "Candidate too stale: $($cand.candidateId)" }
@@ -93,11 +150,16 @@ foreach ($cand in $feed.candidates) {
     $srcAge = Get-AgeDays $src.reviewedAtUtc
     if ($srcAge -gt $MaxSourceReviewAgeDays) { throw "Source review too old: $($src.url)" }
     if ($src.title.Length -lt 3 -or $src.supports.Length -lt 10) { throw "Bad source fields" }
+    Assert-PublicSafeText $src.title "source.title"
+    Assert-PublicSafeText $src.supports "source.supports"
   }
   if ($cand.sources.Count -lt 1 -or $cand.sources.Count -gt 12) { throw "Bad sources count" }
 
   if ($cand.supports.Count -lt 1 -or $cand.supports.Count -gt 10) { throw "Bad supports count" }
   if ($cand.doesNotProve.Count -lt 1 -or $cand.doesNotProve.Count -gt 10) { throw "Bad doesNotProve count" }
+  foreach ($statement in @($cand.supports) + @($cand.doesNotProve)) {
+    Assert-PublicSafeText $statement "candidate claim"
+  }
 
   $ev = $cand.generatorEvidence
   $eallowed = @('provider','authMode','model','runId','generatedAtUtc','usage')
@@ -106,6 +168,8 @@ foreach ($cand in $feed.candidates) {
   if ($ev.authMode -ne 'dedicated_public_source_key') { throw "generatorEvidence.authMode must be dedicated_public_source_key" }
   if ($ev.model -notmatch '^[A-Za-z0-9._-]+$') { throw "Bad model" }
   if (-not (Test-ValidDateTime $ev.generatedAtUtc)) { throw "Bad evidence generatedAtUtc" }
+  $evidenceAge = Get-AgeHours $ev.generatedAtUtc
+  if ($evidenceAge -gt $MaxCandidateAgeHours -or $evidenceAge -lt -1) { throw "Generator evidence too stale or future" }
   $u = $ev.usage
   $uallowed = @('inputTokens','outputTokens','reasoningTokens')
   Assert-NoExtraProperties $u $uallowed

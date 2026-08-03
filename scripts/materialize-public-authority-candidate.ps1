@@ -4,17 +4,43 @@ param(
   [string]$HealthPath = "data/public-authority-publication-health.json",
   [string]$SourceIndexPath = "data/source-index.json",
   [string]$DocsDir = "docs",
-  [string]$JsonTrailsDir = "data/source-trails"
+  [string]$JsonTrailsDir = "data/source-trails",
+  [string]$NowUtc = ""
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$effectiveNowUtc = if ([string]::IsNullOrWhiteSpace($NowUtc)) {
+  [datetime]::UtcNow
+} else {
+  [datetime]::Parse($NowUtc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+}
 
-& pwsh -NoProfile -File "scripts/validate-technical-source-candidate-feed.ps1" -FeedPath $FeedPath | Out-Host
+& pwsh -NoProfile -File "scripts/validate-technical-source-candidate-feed.ps1" -FeedPath $FeedPath -RoutingPath $RoutingPath -HealthPath $HealthPath -SourceIndexPath $SourceIndexPath -NowUtc $NowUtc | Out-Host
 if ($LASTEXITCODE -ne 0) { throw "Validation failed before materialize" }
 
-function Get-DeterministicDigest { param([object]$Obj)
-  $json = $Obj | ConvertTo-Json -Depth 100 -Compress
+function Get-DeterministicDigest { param([object]$Candidate)
+  $canonical = [ordered]@{
+    schema = [string]$Candidate.schema; candidateId = [string]$Candidate.candidateId
+    destination = [string]$Candidate.destination; topicId = [string]$Candidate.topicId
+    title = [string]$Candidate.title; summary = [string]$Candidate.summary
+    reviewedAtUtc = ([datetime]$Candidate.reviewedAtUtc).ToUniversalTime().ToString('o')
+    recheckBeforeUse = [bool]$Candidate.recheckBeforeUse
+    sources = @($Candidate.sources | ForEach-Object { [ordered]@{
+      url = [string]$_.url; title = [string]$_.title; publisher = [string]$_.publisher
+      kind = [string]$_.kind; reviewedAtUtc = ([datetime]$_.reviewedAtUtc).ToUniversalTime().ToString('o')
+      supports = [string]$_.supports
+    } })
+    supports = @($Candidate.supports | ForEach-Object { [string]$_ })
+    doesNotProve = @($Candidate.doesNotProve | ForEach-Object { [string]$_ })
+    generatorEvidence = [ordered]@{
+      provider = [string]$Candidate.generatorEvidence.provider; authMode = [string]$Candidate.generatorEvidence.authMode
+      model = [string]$Candidate.generatorEvidence.model; runId = [string]$Candidate.generatorEvidence.runId
+      generatedAtUtc = ([datetime]$Candidate.generatorEvidence.generatedAtUtc).ToUniversalTime().ToString('o')
+      usage = [ordered]@{ inputTokens = [int]$Candidate.generatorEvidence.usage.inputTokens; outputTokens = [int]$Candidate.generatorEvidence.usage.outputTokens; reasoningTokens = [int]$Candidate.generatorEvidence.usage.reasoningTokens }
+    }
+  }
+  $json = $canonical | ConvertTo-Json -Depth 20 -Compress
   $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
   $sha = [System.Security.Cryptography.SHA256]::Create()
   $hash = $sha.ComputeHash($bytes)
@@ -23,25 +49,30 @@ function Get-DeterministicDigest { param([object]$Obj)
 
 function Get-DatePart { param([string]$Utc) ([datetime]::Parse($Utc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)).ToString('yyyy-MM-dd') }
 
-$routing = Get-Content $RoutingPath -Raw | ConvertFrom-Json -AsHashtable
 $index = Get-Content $SourceIndexPath -Raw | ConvertFrom-Json
 $health = Get-Content $HealthPath -Raw | ConvertFrom-Json
 $feed = Get-Content $FeedPath -Raw | ConvertFrom-Json -Depth 20
 
 if (-not (Test-Path $JsonTrailsDir)) { New-Item -ItemType Directory -Path $JsonTrailsDir -Force | Out-Null }
 
-$now = [datetime]::UtcNow.ToString('o')
+$now = $effectiveNowUtc.ToString('o')
 $promoted = 0
+$promotedIds = @()
 foreach ($cand in $feed.candidates) {
   $id = $cand.candidateId
-  $exists = $false
-  foreach ($o in $index.officialSources) { if ($o.id -eq $id) { $exists = $true; break } }
-  if ($exists) { Write-Host "SKIP idempotent: $id"; continue }
-
   $digest = Get-DeterministicDigest $cand
   $datePart = Get-DatePart $cand.reviewedAtUtc
   $mdPath = Join-Path $DocsDir "$id.md"
   $jsonPath = Join-Path $JsonTrailsDir "$id.json"
+  $exists = $false
+  foreach ($o in $index.officialSources) { if ($o.id -eq $id) { $exists = $true; break } }
+  if ($exists) {
+    if (-not (Test-Path $jsonPath)) { throw "candidateId collision without a materialized trail: $id" }
+    $existingTrail = Get-Content $jsonPath -Raw | ConvertFrom-Json
+    if ($existingTrail.digest -ne $digest) { throw "candidateId collision with different content: $id" }
+    Write-Host "SKIP idempotent: $id"
+    continue
+  }
 
   $supportsList = ($cand.supports | ForEach-Object { "- $_" }) -join "`n"
   $doesNotList = ($cand.doesNotProve | ForEach-Object { "- $_" }) -join "`n"
@@ -123,17 +154,18 @@ Digest: $digest
   $index.relatedFiles += $rel
 
   $promoted++
+  $promotedIds += $id
   Write-Host "MATERIALIZED: $id -> $mdPath + $jsonPath digest=$digest"
 }
 
 if ($promoted -gt 0) {
-  $index.dateModified = ([datetime]::UtcNow.ToString('yyyy-MM-dd'))
+  $index.dateModified = $effectiveNowUtc.ToString('yyyy-MM-dd')
   $index | ConvertTo-Json -Depth 20 | Set-Content -Path $SourceIndexPath
 
   $health.lastSuccessfulPromotionAtUtc = $now
   if (-not $health.PSObject.Properties['recentPromotions']) { $health | Add-Member -NotePropertyName recentPromotions -NotePropertyValue @() -Force }
-  $cids = @($feed.candidates | ForEach-Object { $_.candidateId })
-  $health.recentPromotions += [ordered]@{ candidateIds = $cids; promotedAtUtc = $now; digestSample = $digest; note = "draft PR prepared; publication only after merge and recheck" }
+  $health.recentPromotions += [ordered]@{ candidateIds = @($promotedIds); promotedAtUtc = $now; digestSample = $digest; note = "draft PR prepared; publication only after merge and recheck" }
+  $health.recentPromotions = @($health.recentPromotions | Select-Object -Last 20)
   $health | ConvertTo-Json -Depth 10 | Set-Content -Path $HealthPath
 
   Write-Host "UPDATED index and health (promotion only)"

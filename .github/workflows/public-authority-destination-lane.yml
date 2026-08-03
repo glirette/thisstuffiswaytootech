@@ -15,12 +15,15 @@ jobs:
     steps:
       - name: Fail closed unless variables present
         shell: bash
+        env:
+          FEED_URL: ${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}
+          PR_CREATION_ENABLED: ${{ vars.PUBLIC_AUTHORITY_PR_CREATION_ENABLED }}
         run: |
-          if [ -z "${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}" ]; then
+          if [ -z "$FEED_URL" ]; then
             echo "PUBLIC_AUTHORITY_CANDIDATE_FEED_URL not set; failing closed (no fetch)"
             exit 1
           fi
-          if [ "${{ vars.PUBLIC_AUTHORITY_PR_CREATION_ENABLED }}" != "true" ]; then
+          if [ "$PR_CREATION_ENABLED" != "true" ]; then
             echo "PUBLIC_AUTHORITY_PR_CREATION_ENABLED != true; failing closed (no mutation)"
             exit 1
           fi
@@ -38,8 +41,10 @@ jobs:
 
       - name: Fetch candidate feed (public URL only)
         shell: bash
+        env:
+          FEED_URL: ${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}
         run: |
-          curl -fsSL --max-time 30 -o .authority-work/feed.json "${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}"
+          curl -fsSL --max-time 30 --max-filesize 1048576 -o .authority-work/feed.json "$FEED_URL"
           echo "fetched feed length=$(wc -c < .authority-work/feed.json)"
 
       - name: Validate feed (strict, before any mutation)
@@ -72,7 +77,7 @@ jobs:
         run: |
           set -e
           CAND=$(jq -r '.candidates[0].candidateId // "batch"' .authority-work/feed.json || echo batch)
-          BRANCH="authority/promote-${CAND}-$(date -u +%Y%m%d)"
+          BRANCH="authority/promote-${CAND}-${GITHUB_RUN_ID}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
@@ -90,7 +95,7 @@ jobs:
             --title "Public authority: promote ${CAND}" \
             --body "Automated promotion of validated technical-source-candidate.
           Draft PR per lane rules. Merge after review sets publication.
-          Repository setting can_approve_pull_request_reviews=false is prerequisite.
+          Repository setting “Allow GitHub Actions to create and approve pull requests” must be enabled before this workflow is activated.
           See data/public-authority-publication-health.json for distinction between promotion and publication.
           Provider evidence kept to public-safe fields only (provider,authMode,model,runId,generatedAtUtc,token counts).
           "
