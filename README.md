@@ -14,6 +14,7 @@ It is not a private runbook, deployment guide, provider-worker recipe, customer-
 - [Topic manifest](data/topic-manifest.json)
 - [Press release index](data/press-release-index.json)
 - [Source standard](docs/source-standard.md)
+- Public authority lane: .github/workflows/public-authority-destination-lane.yml (feed validation + materialize to trails; promotion via draft PR only when PUBLIC_AUTHORITY_PR_CREATION_ENABLED=true)
 
 ## Public Announcements
 

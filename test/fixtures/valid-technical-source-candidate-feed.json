@@ -1,0 +1,55 @@
+{
+  "schema": "technical-source-candidate-feed/v1",
+  "generatedAtUtc": "2026-08-03T10:00:00Z",
+  "candidates": [
+    {
+      "schema": "technical-source-candidate/v1",
+      "candidateId": "xai-grok-api-public-reference-20260803",
+      "destination": "glirette/thisstuffiswaytootech",
+      "topicId": "ai-api-docs",
+      "title": "xAI Grok API Public Reference Pointer",
+      "summary": "Public pointer to xAI's official Grok API documentation and developer references for model surface and usage notes.",
+      "reviewedAtUtc": "2026-08-03T09:30:00Z",
+      "recheckBeforeUse": true,
+      "sources": [
+        {
+          "url": "https://docs.x.ai/docs/overview",
+          "title": "xAI API Overview",
+          "publisher": "xai",
+          "kind": "official_vendor_docs",
+          "reviewedAtUtc": "2026-08-03T09:00:00Z",
+          "supports": "Official xAI developer docs for Grok API entry point and model references."
+        },
+        {
+          "url": "https://docs.x.ai/docs/api-reference",
+          "title": "xAI API Reference",
+          "publisher": "xai",
+          "kind": "official_vendor_docs",
+          "reviewedAtUtc": "2026-08-03T09:00:00Z",
+          "supports": "Current reference for available endpoints and public parameters in the Grok API."
+        }
+      ],
+      "supports": [
+        "Locating the current public xAI Grok API documentation before making capability or integration claims.",
+        "Treating official docs as the source of truth for model names and API surface."
+      ],
+      "doesNotProve": [
+        "Private API key access, rate limits for a specific key, or private deployment behavior.",
+        "That any model name or parameter will remain unchanged without re-checking the docs.",
+        "Private provider-worker recipes or exact routing logic."
+      ],
+      "generatorEvidence": {
+        "provider": "openai",
+        "authMode": "dedicated_public_source_key",
+        "model": "gpt-4o-mini",
+        "runId": "run_20260803_a1b2c3",
+        "generatedAtUtc": "2026-08-03T09:45:00Z",
+        "usage": {
+          "inputTokens": 120,
+          "outputTokens": 45,
+          "reasoningTokens": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "technical-source-candidate-feed/v1",
+  "generatedAtUtc": "2026-08-03T10:00:00Z",
+  "candidates": [
+    {
+      "schema": "technical-source-candidate/v1",
+      "candidateId": "bad-provider",
+      "destination": "glirette/thisstuffiswaytootech",
+      "topicId": "ai-api-docs",
+      "title": "Bad Evidence Provider",
+      "summary": "Generator evidence provider must be exactly openai per contract.",
+      "reviewedAtUtc": "2026-08-03T09:30:00Z",
+      "recheckBeforeUse": true,
+      "sources": [
+        {"url": "https://docs.x.ai/docs/overview", "title": "x", "publisher": "xai", "kind": "official_vendor_docs", "reviewedAtUtc": "2026-08-03T09:00:00Z", "supports": "s"}
+      ],
+      "supports": ["s1"],
+      "doesNotProve": ["d1"],
+      "generatorEvidence": {
+        "provider": "xai",
+        "authMode": "dedicated_public_source_key",
+        "model": "grok-build-0.1",
+        "runId": "r",
+        "generatedAtUtc": "2026-08-03T09:45:00Z",
+        "usage": {"inputTokens": 1, "outputTokens": 1, "reasoningTokens": 0}
+      }
+    }
+  ]
+}

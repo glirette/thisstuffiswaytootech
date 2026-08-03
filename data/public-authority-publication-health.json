@@ -1,0 +1,8 @@
+{
+  "schema": "technical-public-authority-publication-health/v1",
+  "lastSuccessfulPromotionAtUtc": null,
+  "lastSuccessfulPublicationAtUtc": null,
+  "publicationNote": "A candidate is not public authority until its draft pull request is reviewed and merged.",
+  "recentPromotions": []
+}
+

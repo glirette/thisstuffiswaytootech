@@ -1,0 +1,113 @@
+name: public-authority-destination-lane
+
+"on":
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail closed unless variables present
+        shell: bash
+        run: |
+          if [ -z "${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}" ]; then
+            echo "PUBLIC_AUTHORITY_CANDIDATE_FEED_URL not set; failing closed (no fetch)"
+            exit 1
+          fi
+          if [ "${{ vars.PUBLIC_AUTHORITY_PR_CREATION_ENABLED }}" != "true" ]; then
+            echo "PUBLIC_AUTHORITY_PR_CREATION_ENABLED != true; failing closed (no mutation)"
+            exit 1
+          fi
+          echo "Guards passed for public authority lane"
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Prepare workdir
+        shell: bash
+        run: |
+          mkdir -p .authority-work data/source-trails
+
+      - name: Fetch candidate feed (public URL only)
+        shell: bash
+        run: |
+          curl -fsSL --max-time 30 -o .authority-work/feed.json "${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}"
+          echo "fetched feed length=$(wc -c < .authority-work/feed.json)"
+
+      - name: Validate feed (strict, before any mutation)
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -File scripts/validate-technical-source-candidate-feed.ps1 -FeedPath .authority-work/feed.json
+
+      - name: Materialize only validated candidates to trails + index (sanitized)
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -File scripts/materialize-public-authority-candidate.ps1 -FeedPath .authority-work/feed.json
+
+      - name: Check for changes
+        id: changes
+        shell: bash
+        run: |
+          if git diff --quiet -- data/source-index.json data/public-authority-publication-health.json docs/ data/source-trails/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No material changes from candidates."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            git diff --stat -- data/source-index.json data/public-authority-publication-health.json docs/ data/source-trails/ | cat
+          fi
+
+      - name: Create source-scoped branch + draft PR (promotion only)
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          CAND=$(jq -r '.candidates[0].candidateId // "batch"' .authority-work/feed.json || echo batch)
+          BRANCH="authority/promote-${CAND}-$(date -u +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/source-index.json data/public-authority-publication-health.json
+          git add docs/*.md data/source-trails/*.json 2>/dev/null || true
+          git commit -m "chore(authority): promote validated public source candidate ${CAND}
+
+          - source-scoped branch for review
+          - lastSuccessfulPromotionAtUtc updated; publication only on merge+recheck
+          - feed from PUBLIC_AUTHORITY_CANDIDATE_FEED_URL only
+          - no raw provider output; sanitized public-safe metadata only
+          "
+          git push origin "$BRANCH"
+          gh pr create --draft --head "$BRANCH" --base main \
+            --title "Public authority: promote ${CAND}" \
+            --body "Automated promotion of validated technical-source-candidate.
+          Draft PR per lane rules. Merge after review sets publication.
+          Repository setting can_approve_pull_request_reviews=false is prerequisite.
+          See data/public-authority-publication-health.json for distinction between promotion and publication.
+          Provider evidence kept to public-safe fields only (provider,authMode,model,runId,generatedAtUtc,token counts).
+          "
+          echo "PR prepared for ${BRANCH}"
+          echo "{\"branch\":\"$BRANCH\",\"candidate\":\"$CAND\",\"promotedAtUtc\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"type\":\"promotion-only\"}" > .authority-work/compact-evidence.json
+          cat .authority-work/compact-evidence.json
+
+      - name: Record compact evidence (no-op when no change)
+        if: steps.changes.outputs.changed != 'true'
+        shell: bash
+        run: |
+          echo "{\"action\":\"no-op\",\"reason\":\"idempotent or no valid new candidates\",\"atUtc\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .authority-work/compact-evidence.json
+          cat .authority-work/compact-evidence.json
+
+      - name: Upload compact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-authority-evidence
+          path: .authority-work/compact-evidence.json
+          retention-days: 90

@@ -25,6 +25,8 @@ Canonical files:
 - Topic manifest: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/topic-manifest.json
 - Press release index: https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/press-release-index.json
 - Source standard: https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/source-standard.md
+- Public authority destination lane (executable validation+materialize): https://github.com/glirette/thisstuffiswaytootech/blob/main/.github/workflows/public-authority-destination-lane.yml
+- Public authority routing + health: https://github.com/glirette/thisstuffiswaytootech/blob/main/data/public-authority-routing.json , https://github.com/glirette/thisstuffiswaytootech/blob/main/data/public-authority-publication-health.json
 
 Current official source families seeded here:
 

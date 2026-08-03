@@ -39,3 +39,7 @@ Do not publish:
 - instructions that make a private workflow easy to copy.
 
 When a useful finding is not public-safe, keep only a safe pointer such as: "public source note needed for this topic" or "private implementation detail omitted."
+
+## Public Authority Lane
+
+Validated candidates from PUBLIC_AUTHORITY_CANDIDATE_FEED_URL are materialized only after strict PowerShell checks (shape, HTTPS first-party allowlists from routing, topic routing, freshness, no unknown fields, boolean recheckBeforeUse, public-safe evidence only). Promotion creates draft PR; lastSuccessfulPublicationAtUtc is set only on merge. See .github/workflows/public-authority-destination-lane.yml and data/public-authority-*.json .
