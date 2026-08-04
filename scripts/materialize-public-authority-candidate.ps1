@@ -5,6 +5,8 @@ param(
   [string]$SourceIndexPath = "data/source-index.json",
   [string]$DocsDir = "docs",
   [string]$JsonTrailsDir = "data/source-trails",
+  [string]$FeedSchemaPath = "schemas/technical-source-candidate-feed.schema.json",
+  [string]$CandidateSchemaPath = "schemas/technical-source-candidate.schema.json",
   [string]$NowUtc = ""
 )
 
@@ -16,74 +18,82 @@ $effectiveNowUtc = if ([string]::IsNullOrWhiteSpace($NowUtc)) {
   [datetime]::Parse($NowUtc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
 }
 
-& pwsh -NoProfile -File "scripts/validate-technical-source-candidate-feed.ps1" -FeedPath $FeedPath -RoutingPath $RoutingPath -HealthPath $HealthPath -SourceIndexPath $SourceIndexPath -NowUtc $NowUtc | Out-Host
+$validatorPath = Join-Path $PSScriptRoot 'validate-technical-source-candidate-feed.ps1'
+& pwsh -NoProfile -File $validatorPath -FeedPath $FeedPath -RoutingPath $RoutingPath -HealthPath $HealthPath -SourceIndexPath $SourceIndexPath -FeedSchemaPath $FeedSchemaPath -CandidateSchemaPath $CandidateSchemaPath -NowUtc $NowUtc | Out-Host
 if ($LASTEXITCODE -ne 0) { throw "Validation failed before materialize" }
 
-function Get-DeterministicDigest { param([object]$Candidate)
+function Get-Sha256 {
+  param([string]$Text)
+  $bytes = [System.Text.Encoding]::UTF8.GetBytes($Text)
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try {
+    return [BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-','').ToLowerInvariant()
+  } finally {
+    $sha.Dispose()
+  }
+}
+
+function Get-DeterministicDigest {
+  param([object]$Candidate)
   $canonical = [ordered]@{
-    schema = [string]$Candidate.schema; candidateId = [string]$Candidate.candidateId
-    destination = [string]$Candidate.destination; topicId = [string]$Candidate.topicId
-    title = [string]$Candidate.title; summary = [string]$Candidate.summary
+    schema = [string]$Candidate.schema
+    candidateId = [string]$Candidate.candidateId
+    destination = [string]$Candidate.destination
+    topicId = [string]$Candidate.topicId
+    title = [string]$Candidate.title
+    summary = [string]$Candidate.summary
     reviewedAtUtc = ([datetime]$Candidate.reviewedAtUtc).ToUniversalTime().ToString('o')
     recheckBeforeUse = [bool]$Candidate.recheckBeforeUse
-    sources = @($Candidate.sources | ForEach-Object { [ordered]@{
-      url = [string]$_.url; title = [string]$_.title; publisher = [string]$_.publisher
-      kind = [string]$_.kind; reviewedAtUtc = ([datetime]$_.reviewedAtUtc).ToUniversalTime().ToString('o')
-      supports = [string]$_.supports
-    } })
+    sources = @($Candidate.sources | ForEach-Object {
+      [ordered]@{
+        url = [string]$_.url
+        title = [string]$_.title
+        publisher = [string]$_.publisher
+        kind = [string]$_.kind
+        reviewedAtUtc = ([datetime]$_.reviewedAtUtc).ToUniversalTime().ToString('o')
+        supports = [string]$_.supports
+      }
+    })
     supports = @($Candidate.supports | ForEach-Object { [string]$_ })
     doesNotProve = @($Candidate.doesNotProve | ForEach-Object { [string]$_ })
     generatorEvidence = [ordered]@{
-      provider = [string]$Candidate.generatorEvidence.provider; authMode = [string]$Candidate.generatorEvidence.authMode
-      model = [string]$Candidate.generatorEvidence.model; runId = [string]$Candidate.generatorEvidence.runId
+      provider = [string]$Candidate.generatorEvidence.provider
+      authMode = [string]$Candidate.generatorEvidence.authMode
+      model = [string]$Candidate.generatorEvidence.model
+      runId = [string]$Candidate.generatorEvidence.runId
       generatedAtUtc = ([datetime]$Candidate.generatorEvidence.generatedAtUtc).ToUniversalTime().ToString('o')
-      usage = [ordered]@{ inputTokens = [int]$Candidate.generatorEvidence.usage.inputTokens; outputTokens = [int]$Candidate.generatorEvidence.usage.outputTokens; reasoningTokens = [int]$Candidate.generatorEvidence.usage.reasoningTokens }
+      usage = [ordered]@{
+        inputTokens = [int]$Candidate.generatorEvidence.usage.inputTokens
+        outputTokens = [int]$Candidate.generatorEvidence.usage.outputTokens
+        reasoningTokens = [int]$Candidate.generatorEvidence.usage.reasoningTokens
+      }
     }
   }
-  $json = $canonical | ConvertTo-Json -Depth 20 -Compress
-  $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
-  $sha = [System.Security.Cryptography.SHA256]::Create()
-  $hash = $sha.ComputeHash($bytes)
-  [BitConverter]::ToString($hash).Replace('-','').ToLower()
+  return Get-Sha256 ($canonical | ConvertTo-Json -Depth 20 -Compress)
 }
 
-function Get-DatePart { param([string]$Utc) ([datetime]::Parse($Utc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)).ToString('yyyy-MM-dd') }
-
-$index = Get-Content $SourceIndexPath -Raw | ConvertFrom-Json
-$health = Get-Content $HealthPath -Raw | ConvertFrom-Json
-$feed = Get-Content $FeedPath -Raw | ConvertFrom-Json -Depth 20
-
-if (-not (Test-Path $JsonTrailsDir)) { New-Item -ItemType Directory -Path $JsonTrailsDir -Force | Out-Null }
-
-$now = $effectiveNowUtc.ToString('o')
-$promoted = 0
-$promotedIds = @()
-foreach ($cand in $feed.candidates) {
-  $id = $cand.candidateId
-  $digest = Get-DeterministicDigest $cand
-  $datePart = Get-DatePart $cand.reviewedAtUtc
-  $mdPath = Join-Path $DocsDir "$id.md"
-  $jsonPath = Join-Path $JsonTrailsDir "$id.json"
-  $exists = $false
-  foreach ($o in $index.officialSources) { if ($o.id -eq $id) { $exists = $true; break } }
-  if ($exists) {
-    if (-not (Test-Path $jsonPath)) { throw "candidateId collision without a materialized trail: $id" }
-    $existingTrail = Get-Content $jsonPath -Raw | ConvertFrom-Json
-    if ($existingTrail.digest -ne $digest) { throw "candidateId collision with different content: $id" }
-    Write-Host "SKIP idempotent: $id"
-    continue
+function Convert-ToCanonicalUtc {
+  param([object]$Value)
+  if ($Value -is [datetime]) {
+    return $Value.ToUniversalTime()
   }
+  return [datetime]::Parse([string]$Value, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+}
 
-  $supportsList = ($cand.supports | ForEach-Object { "- $_" }) -join "`n"
-  $doesNotList = ($cand.doesNotProve | ForEach-Object { "- $_" }) -join "`n"
-  $srcList = ($cand.sources | ForEach-Object { "- [$($_.title)]($($_.url)) ($($_.publisher), $($_.kind))" }) -join "`n"
-  $ev = $cand.generatorEvidence
-  $md = @"
-# $($cand.title)
+function New-SourceTrailMarkdown {
+  param([object]$Candidate, [string]$Digest)
+  $datePart = (Convert-ToCanonicalUtc $Candidate.reviewedAtUtc).ToString('yyyy-MM-dd')
+  $supportsList = ($Candidate.supports | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+  $doesNotList = ($Candidate.doesNotProve | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+  $sourceList = ($Candidate.sources | ForEach-Object { "- [$($_.title)]($($_.url)) ($($_.publisher), $($_.kind))" }) -join [Environment]::NewLine
+  $evidence = $Candidate.generatorEvidence
+  $generatedAtUtc = (Convert-ToCanonicalUtc $evidence.generatedAtUtc).ToString('o')
+  return @"
+# $($Candidate.title)
 
 Reviewed: $datePart
 
-$($cand.summary)
+$($Candidate.summary)
 
 ## Supports
 
@@ -95,80 +105,132 @@ $doesNotList
 
 ## Sources
 
-$srcList
+$sourceList
 
 ## Recheck Before Use
 
-$($cand.recheckBeforeUse)
+$($Candidate.recheckBeforeUse)
 
 This source trail must be re-checked against the controlling official sources before use in decisions.
 
 ## Generator Evidence (public-safe metadata only)
 
-- provider: $($ev.provider)
-- authMode: $($ev.authMode)
-- model: $($ev.model)
-- runId: $($ev.runId)
-- generatedAtUtc: $($ev.generatedAtUtc.ToString('o'))
-- usage: input=$($ev.usage.inputTokens) output=$($ev.usage.outputTokens) reasoning=$($ev.usage.reasoningTokens)
+- provider: $($evidence.provider)
+- authMode: $($evidence.authMode)
+- model: $($evidence.model)
+- runId: $($evidence.runId)
+- generatedAtUtc: $generatedAtUtc
+- usage: input=$($evidence.usage.inputTokens) output=$($evidence.usage.outputTokens) reasoning=$($evidence.usage.reasoningTokens)
 
-Digest: $digest
+Digest: $Digest
 "@.Trim()
-  Set-Content -Path $mdPath -Value $md -NoNewline
+}
 
-  $trailJson = [ordered]@{
+if (-not (Test-Path -LiteralPath $DocsDir)) { throw "Docs directory does not exist: $DocsDir" }
+$index = Get-Content -LiteralPath $SourceIndexPath -Raw | ConvertFrom-Json
+$health = Get-Content -LiteralPath $HealthPath -Raw | ConvertFrom-Json
+$feed = Get-Content -LiteralPath $FeedPath -Raw | ConvertFrom-Json -Depth 20
+$now = $effectiveNowUtc.ToString('o')
+$plans = [System.Collections.Generic.List[object]]::new()
+
+foreach ($candidate in @($feed.candidates)) {
+  $id = [string]$candidate.candidateId
+  $digest = Get-DeterministicDigest $candidate
+  $markdownPath = Join-Path $DocsDir "$id.md"
+  $trailPath = Join-Path $JsonTrailsDir "$id.json"
+  $markdown = New-SourceTrailMarkdown $candidate $digest
+  $indexEntry = @($index.officialSources | Where-Object { $_.id -eq $id })
+
+  if ($indexEntry.Count -gt 1) { throw "Duplicate source-index id: $id" }
+  if ($indexEntry.Count -eq 1) {
+    if (-not (Test-Path -LiteralPath $markdownPath) -or -not (Test-Path -LiteralPath $trailPath)) {
+      throw "candidateId collision without both materialized artifacts: $id"
+    }
+    $existingTrail = Get-Content -LiteralPath $trailPath -Raw | ConvertFrom-Json
+    if ($existingTrail.candidateId -ne $id -or $existingTrail.digest -ne $digest) {
+      throw "candidateId collision with different content: $id"
+    }
+    if ((Get-Content -LiteralPath $markdownPath -Raw) -cne $markdown) {
+      throw "candidateId collision with different Markdown content: $id"
+    }
+    $plans.Add([ordered]@{ candidate = $candidate; digest = $digest; markdownPath = $markdownPath; trailPath = $trailPath; markdown = $markdown; isExisting = $true })
+    continue
+  }
+
+  if ((Test-Path -LiteralPath $markdownPath) -or (Test-Path -LiteralPath $trailPath)) {
+    throw "Output-path collision for new candidateId: $id"
+  }
+  $plans.Add([ordered]@{ candidate = $candidate; digest = $digest; markdownPath = $markdownPath; trailPath = $trailPath; markdown = $markdown; isExisting = $false })
+}
+
+$newPlans = @($plans | Where-Object { -not $_.isExisting })
+if ($newPlans.Count -gt 0 -and -not (Test-Path -LiteralPath $JsonTrailsDir)) {
+  New-Item -ItemType Directory -Path $JsonTrailsDir -Force | Out-Null
+}
+
+$promotedIds = [System.Collections.Generic.List[string]]::new()
+foreach ($plan in $plans) {
+  $candidate = $plan.candidate
+  if ($plan.isExisting) {
+    Write-Host "SKIP idempotent: $($candidate.candidateId)"
+    continue
+  }
+
+  Set-Content -LiteralPath $plan.markdownPath -Value $plan.markdown -NoNewline
+  $trail = [ordered]@{
     schema = "public-authority-source-trail/v1"
-    candidateId = $id
-    topicId = $cand.topicId
-    title = $cand.title
-    reviewedAtUtc = $cand.reviewedAtUtc
-    recheckBeforeUse = $cand.recheckBeforeUse
-    sources = $cand.sources
-    supports = $cand.supports
-    doesNotProve = $cand.doesNotProve
-    generatorEvidence = $cand.generatorEvidence
-    digest = $digest
+    candidateId = $candidate.candidateId
+    topicId = $candidate.topicId
+    title = $candidate.title
+    reviewedAtUtc = (Convert-ToCanonicalUtc $candidate.reviewedAtUtc).ToString('o')
+    recheckBeforeUse = $candidate.recheckBeforeUse
+    sources = $candidate.sources
+    supports = $candidate.supports
+    doesNotProve = $candidate.doesNotProve
+    generatorEvidence = $candidate.generatorEvidence
+    digest = $plan.digest
     materializedAtUtc = $now
   }
-  $trailJson | ConvertTo-Json -Depth 20 | Set-Content -Path $jsonPath
+  $trail | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $plan.trailPath
 
-  $sourceType = if ($cand.sources[0].kind) { $cand.sources[0].kind } else { "official_vendor_docs" }
-  $captured = $datePart
-  $urls = $cand.sources | ForEach-Object { $_.url }
-  $newSrc = [ordered]@{
-    id = $id
-    title = $cand.title
+  $sourceType = [string]$candidate.sources[0].kind
+  $sourceUrls = @($candidate.sources | ForEach-Object { [string]$_.url })
+  $index.officialSources += [ordered]@{
+    id = $candidate.candidateId
+    title = $candidate.title
     sourceType = $sourceType
-    capturedAt = $captured
-    urls = $urls
-    supports = $cand.supports
-    doesNotProve = $cand.doesNotProve
+    capturedAt = (Convert-ToCanonicalUtc $candidate.reviewedAtUtc).ToString('yyyy-MM-dd')
+    urls = $sourceUrls
+    supports = @($candidate.supports)
+    doesNotProve = @($candidate.doesNotProve)
   }
-  $index.officialSources += $newSrc
-
-  $rel = [ordered]@{
-    title = $cand.title
-    path = "docs/$id.md"
-    useFor = ($cand.summary.Substring(0, [Math]::Min(120, $cand.summary.Length)))
+  $index.relatedFiles += [ordered]@{
+    title = $candidate.title
+    path = "docs/$($candidate.candidateId).md"
+    useFor = $candidate.summary.Substring(0, [Math]::Min(120, $candidate.summary.Length))
   }
-  $index.relatedFiles += $rel
-
-  $promoted++
-  $promotedIds += $id
-  Write-Host "MATERIALIZED: $id -> $mdPath + $jsonPath digest=$digest"
+  $promotedIds.Add([string]$candidate.candidateId)
+  Write-Host "MATERIALIZED: $($candidate.candidateId) -> $($plan.markdownPath) + $($plan.trailPath) digest=$($plan.digest)"
 }
 
-if ($promoted -gt 0) {
+if ($promotedIds.Count -gt 0) {
   $index.dateModified = $effectiveNowUtc.ToString('yyyy-MM-dd')
-  $index | ConvertTo-Json -Depth 20 | Set-Content -Path $SourceIndexPath
+  $index | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $SourceIndexPath
 
   $health.lastSuccessfulPromotionAtUtc = $now
-  if (-not $health.PSObject.Properties['recentPromotions']) { $health | Add-Member -NotePropertyName recentPromotions -NotePropertyValue @() -Force }
-  $health.recentPromotions += [ordered]@{ candidateIds = @($promotedIds); promotedAtUtc = $now; digestSample = $digest; note = "draft PR prepared; publication only after merge and recheck" }
+  if (-not $health.PSObject.Properties['recentPromotions']) {
+    $health | Add-Member -NotePropertyName recentPromotions -NotePropertyValue @() -Force
+  }
+  $health.recentPromotions += [ordered]@{
+    candidateIds = @($promotedIds)
+    materializedAtUtc = $now
+    digestSample = $newPlans[0].digest
+    note = "candidate materialized for proposed review; canonical authority only after reviewed merge"
+  }
   $health.recentPromotions = @($health.recentPromotions | Select-Object -Last 20)
-  $health | ConvertTo-Json -Depth 10 | Set-Content -Path $HealthPath
-
-  Write-Host "UPDATED index and health (promotion only)"
+  $health | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $HealthPath
+  Write-Host "UPDATED index and promotion evidence"
 }
-Write-Host "Materialize complete. promoted=$promoted"
+
+Write-Host "Materialize complete. promoted=$($promotedIds.Count)"
 exit 0

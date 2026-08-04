@@ -3,18 +3,46 @@ param(
   [string]$RoutingPath = "data/public-authority-routing.json",
   [string]$HealthPath = "data/public-authority-publication-health.json",
   [string]$SourceIndexPath = "data/source-index.json",
-  [int]$MaxFeedAgeHours = 30,
-  [int]$MaxCandidateAgeHours = 72,
-  [int]$MaxSourceReviewAgeDays = 31,
-  [string]$NowUtc = ""
+  [string]$FeedSchemaPath = "schemas/technical-source-candidate-feed.schema.json",
+  [string]$CandidateSchemaPath = "schemas/technical-source-candidate.schema.json",
+  [int]$MaxFeedAgeHours = 0,
+  [int]$MaxCandidateAgeHours = 0,
+  [int]$MaxSourceReviewAgeDays = 0,
+  [string]$NowUtc = "",
+  [string]$ValidationResultPath = ""
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$expectedDestination = 'glirette/thisstuffiswaytootech'
 $effectiveNowUtc = if ([string]::IsNullOrWhiteSpace($NowUtc)) {
   [datetime]::UtcNow
 } else {
   [datetime]::Parse($NowUtc, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+}
+
+function Get-Sha256 {
+  param([string]$Text)
+  $bytes = [System.Text.Encoding]::UTF8.GetBytes($Text)
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try {
+    return [BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-','').ToLowerInvariant()
+  } finally {
+    $sha.Dispose()
+  }
+}
+
+function Get-CandidateIdentity {
+  param([object]$Candidate)
+  $urls = [string[]]@($Candidate.sources | ForEach-Object { ([string]$_.url).Trim() })
+  [Array]::Sort($urls, [StringComparer]::OrdinalIgnoreCase)
+  $canonical = @(
+    ([string]$Candidate.destination).ToLowerInvariant(),
+    ([string]$Candidate.topicId).Trim().ToLowerInvariant(),
+    ([string]$Candidate.summary).Trim(),
+    $urls
+  ) -join [char]10
+  return Get-Sha256 $canonical
 }
 
 function Get-DeterministicDigest {
@@ -53,16 +81,17 @@ function Get-DeterministicDigest {
       }
     }
   }
-  $json = $canonical | ConvertTo-Json -Depth 20 -Compress
-  $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
-  $sha = [System.Security.Cryptography.SHA256]::Create()
-  $hash = $sha.ComputeHash($bytes)
-  return [BitConverter]::ToString($hash).Replace('-','').ToLower()
+  return Get-Sha256 ($canonical | ConvertTo-Json -Depth 20 -Compress)
 }
 
 function Test-ValidDateTime {
-  param([string]$S)
-  try { [datetime]::Parse($S, $null, [System.Globalization.DateTimeStyles]::RoundtripKind) | Out-Null; return $true } catch { return $false }
+  param([string]$Text)
+  try {
+    [datetime]::Parse($Text, $null, [System.Globalization.DateTimeStyles]::RoundtripKind) | Out-Null
+    return $true
+  } catch {
+    return $false
+  }
 }
 
 function Get-AgeHours {
@@ -87,106 +116,150 @@ function Get-AgeDays {
 
 function Assert-PublicSafeText {
   param([string]$Text, [string]$Field)
-  if ($Text -match '[\x00-\x08\x0B\x0C\x0E-\x1F]') { throw "Control character in ${Field}" }
+  if ($Text -match '[\x00-\x1F\x7F]') { throw "Control character in $Field" }
   $secretOrPrivatePattern = '(?i)(blob\.core\.windows\.net|DefaultEndpointsProtocol=|AccountKey=|SharedAccessSignature=|Bearer\s+[A-Za-z0-9._~+/-]{12,}|[?&](?:sig|se|sp|sv|token|key)=|https?://(?:localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+))'
-  if ($Text -match $secretOrPrivatePattern) { throw "Private or credential-like content in ${Field}" }
+  if ($Text -match $secretOrPrivatePattern) { throw "Private or credential-like content in $Field" }
+}
+
+function Assert-MarkdownSafeUrl {
+  param([string]$Url)
+  if ($Url -match '[\s\[\]\(\)<>"'']') { throw "Unsafe characters in source url" }
+  try {
+    $uri = [Uri]$Url
+  } catch {
+    throw "Invalid source url"
+  }
+  if (-not $uri.IsAbsoluteUri -or $uri.Scheme -ne 'https' -or -not [string]::IsNullOrWhiteSpace($uri.UserInfo)) {
+    throw "Non-HTTPS or credentialed source url"
+  }
 }
 
 function Assert-NoExtraProperties {
-  param([object]$Obj, [string[]]$Allowed)
-  $props = $Obj.PSObject.Properties.Name
-  foreach ($p in $props) { if ($Allowed -notcontains $p) { throw "Unknown field: $p" } }
+  param([object]$Object, [string[]]$Allowed)
+  $properties = $Object.PSObject.Properties.Name
+  foreach ($property in $properties) {
+    if ($Allowed -notcontains $property) { throw "Unknown field: $property" }
+  }
 }
 
-$routing = Get-Content $RoutingPath -Raw | ConvertFrom-Json -AsHashtable
-$health = Get-Content $HealthPath -Raw | ConvertFrom-Json
-$index = Get-Content $SourceIndexPath -Raw | ConvertFrom-Json
+function Test-LocalFeedSchema {
+  param([string]$RawFeed)
+  $feedSchema = Get-Content -LiteralPath $FeedSchemaPath -Raw | ConvertFrom-Json -AsHashtable
+  $candidateSchema = Get-Content -LiteralPath $CandidateSchemaPath -Raw | ConvertFrom-Json -AsHashtable
+  [void]$feedSchema.Remove('$id')
+  [void]$candidateSchema.Remove('$id')
+  if (-not $feedSchema.ContainsKey('$defs')) { $feedSchema['$defs'] = [ordered]@{} }
+  $feedSchema['$defs']['candidate'] = $candidateSchema
+  $feedSchema['properties']['candidates']['items'] = [ordered]@{ '$ref' = '#/$defs/candidate' }
+  $combinedSchema = $feedSchema | ConvertTo-Json -Depth 100
+  try {
+    if (-not ($RawFeed | Test-Json -Schema $combinedSchema -ErrorAction Stop)) {
+      throw 'schema returned false'
+    }
+  } catch {
+    throw "Schema validation failed: $($_.Exception.Message)"
+  }
+}
 
-$feed = Get-Content $FeedPath -Raw | ConvertFrom-Json -Depth 20
+$feedRaw = [System.IO.File]::ReadAllText((Resolve-Path -LiteralPath $FeedPath))
+Test-LocalFeedSchema $feedRaw
+$feed = $feedRaw | ConvertFrom-Json -Depth 20
+$routing = Get-Content -LiteralPath $RoutingPath -Raw | ConvertFrom-Json -AsHashtable
+$index = Get-Content -LiteralPath $SourceIndexPath -Raw | ConvertFrom-Json
+
+if ($routing.destination -ne $expectedDestination) { throw "Routing destination does not match this repository" }
+if ($MaxFeedAgeHours -le 0) { $MaxFeedAgeHours = [int]$routing.maxFeedAgeHours }
+if ($MaxCandidateAgeHours -le 0) { $MaxCandidateAgeHours = [int]$routing.maxCandidateAgeHours }
+if ($MaxSourceReviewAgeDays -le 0) { $MaxSourceReviewAgeDays = [int]$routing.maxSourceReviewAgeDays }
+
 Assert-NoExtraProperties $feed @('schema','generatedAtUtc','candidates')
 if ($feed.schema -ne 'technical-source-candidate-feed/v1') { throw "Bad feed schema: $($feed.schema)" }
 if (-not (Test-ValidDateTime $feed.generatedAtUtc)) { throw "Invalid feed generatedAtUtc" }
 $feedAge = Get-AgeHours $feed.generatedAtUtc
 if ($feedAge -gt $MaxFeedAgeHours -or $feedAge -lt -1) { throw "Feed too stale or future: $feedAge h" }
-if ($feed.candidates.Count -gt 20) { throw "Too many candidates" }
 
 $publisherAllowlists = $routing.publishers
 $routes = $routing.routes
-$allowedPublishersForTopic = @{}
-foreach ($t in $routes.Keys) { $allowedPublishersForTopic[$t] = $routes[$t] }
-
 $validCount = 0
 $digests = @{}
-foreach ($cand in $feed.candidates) {
+$validationCandidates = [System.Collections.Generic.List[object]]::new()
+foreach ($cand in @($feed.candidates)) {
   $allowed = @('schema','candidateId','destination','topicId','title','summary','reviewedAtUtc','recheckBeforeUse','sources','supports','doesNotProve','generatorEvidence')
   Assert-NoExtraProperties $cand $allowed
   if ($cand.schema -ne 'technical-source-candidate/v1') { throw "Bad candidate schema for $($cand.candidateId)" }
-  if ($cand.destination -ne 'glirette/thisstuffiswaytootech') { throw "Bad destination for $($cand.candidateId)" }
-  if ($cand.candidateId -notmatch '^[a-z0-9]+(?:-[a-z0-9]+)*$') { throw "Bad candidateId: $($cand.candidateId)" }
-  if ($cand.topicId -notmatch '^[a-z0-9]+(?:-[a-z0-9]+)*$') { throw "Bad topicId: $($cand.topicId)" }
+  if ($cand.destination -ne $routing.destination) { throw "Bad destination for $($cand.candidateId)" }
   if (-not $routes.ContainsKey($cand.topicId)) { throw "Unrouted topicId: $($cand.topicId)" }
-  if ($cand.title.Length -lt 8 -or $cand.title.Length -gt 140) { throw "Bad title length" }
-  if ($cand.summary.Length -lt 20 -or $cand.summary.Length -gt 1200) { throw "Bad summary length" }
+  if ((Get-CandidateIdentity $cand) -cne $cand.candidateId) { throw "candidateId is not the stable content identity: $($cand.candidateId)" }
   Assert-PublicSafeText $cand.title "candidate.title"
   Assert-PublicSafeText $cand.summary "candidate.summary"
   if (-not (Test-ValidDateTime $cand.reviewedAtUtc)) { throw "Bad reviewedAtUtc" }
-  $candAge = Get-AgeHours $cand.reviewedAtUtc
-  if ($candAge -gt $MaxCandidateAgeHours -or $candAge -lt -1) { throw "Candidate too stale: $($cand.candidateId)" }
-  if ($cand.recheckBeforeUse -isnot [bool]) { throw "recheckBeforeUse must be boolean" }
+  $candidateAge = Get-AgeHours $cand.reviewedAtUtc
+  if ($candidateAge -gt $MaxCandidateAgeHours -or $candidateAge -lt 0) { throw "Candidate too stale or future: $($cand.candidateId)" }
 
-  foreach ($src in $cand.sources) {
-    $sallowed = @('url','title','publisher','kind','reviewedAtUtc','supports')
-    Assert-NoExtraProperties $src $sallowed
-    if ($src.url -notmatch '^https://') { throw "Non-HTTPS source url: $($src.url)" }
-    if ($src.url -match 'blob\.core\.windows|private|token=|key=') { throw "Rejected private/blob url: $($src.url)" }
-    $pub = $src.publisher
-    if (-not $publisherAllowlists.ContainsKey($pub)) { throw "Unknown publisher: $pub" }
-    $allowHosts = $publisherAllowlists[$pub]
+  foreach ($source in @($cand.sources)) {
+    $sourceAllowed = @('url','title','publisher','kind','reviewedAtUtc','supports')
+    Assert-NoExtraProperties $source $sourceAllowed
+    Assert-PublicSafeText $source.url "source.url"
+    Assert-MarkdownSafeUrl $source.url
+    $publisher = [string]$source.publisher
+    if (-not $publisherAllowlists.ContainsKey($publisher)) { throw "Unknown publisher: $publisher" }
+    if (@($routes[$cand.topicId]) -notcontains $publisher) { throw "Publisher $publisher is not allowed for topic $($cand.topicId)" }
     $hostOk = $false
-    foreach ($h in $allowHosts) { if ($src.url.StartsWith($h)) { $hostOk=$true; break } }
-    if (-not $hostOk) { throw "Source url not in allowlist for ${pub}: $($src.url)" }
-    if ($src.kind -notin @('official_vendor_docs','official_project_docs','official_changelog','standards_body')) { throw "Bad kind" }
-    if (-not (Test-ValidDateTime $src.reviewedAtUtc)) { throw "Bad source reviewedAtUtc" }
-    $srcAge = Get-AgeDays $src.reviewedAtUtc
-    if ($srcAge -gt $MaxSourceReviewAgeDays) { throw "Source review too old: $($src.url)" }
-    if ($src.title.Length -lt 3 -or $src.supports.Length -lt 10) { throw "Bad source fields" }
-    Assert-PublicSafeText $src.title "source.title"
-    Assert-PublicSafeText $src.supports "source.supports"
+    foreach ($allowedPrefix in @($publisherAllowlists[$publisher])) {
+      if ($source.url.StartsWith([string]$allowedPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        $hostOk = $true
+        break
+      }
+    }
+    if (-not $hostOk) { throw "Source url not in allowlist for $($publisher): $($source.url)" }
+    if (-not (Test-ValidDateTime $source.reviewedAtUtc)) { throw "Bad source reviewedAtUtc" }
+    $sourceAge = Get-AgeDays $source.reviewedAtUtc
+    if ($sourceAge -gt $MaxSourceReviewAgeDays -or $sourceAge -lt 0) { throw "Source review too old or future: $($source.url)" }
+    Assert-PublicSafeText $source.title "source.title"
+    Assert-PublicSafeText $source.supports "source.supports"
   }
-  if ($cand.sources.Count -lt 1 -or $cand.sources.Count -gt 12) { throw "Bad sources count" }
 
-  if ($cand.supports.Count -lt 1 -or $cand.supports.Count -gt 10) { throw "Bad supports count" }
-  if ($cand.doesNotProve.Count -lt 1 -or $cand.doesNotProve.Count -gt 10) { throw "Bad doesNotProve count" }
   foreach ($statement in @($cand.supports) + @($cand.doesNotProve)) {
     Assert-PublicSafeText $statement "candidate claim"
   }
 
-  $ev = $cand.generatorEvidence
-  $eallowed = @('provider','authMode','model','runId','generatedAtUtc','usage')
-  Assert-NoExtraProperties $ev $eallowed
-  if ($ev.provider -ne 'openai') { throw "generatorEvidence.provider must be openai" }
-  if ($ev.authMode -ne 'dedicated_public_source_key') { throw "generatorEvidence.authMode must be dedicated_public_source_key" }
-  if ($ev.model -notmatch '^[A-Za-z0-9._-]+$') { throw "Bad model" }
-  if (-not (Test-ValidDateTime $ev.generatedAtUtc)) { throw "Bad evidence generatedAtUtc" }
-  $evidenceAge = Get-AgeHours $ev.generatedAtUtc
-  if ($evidenceAge -gt $MaxCandidateAgeHours -or $evidenceAge -lt -1) { throw "Generator evidence too stale or future" }
-  $u = $ev.usage
-  $uallowed = @('inputTokens','outputTokens','reasoningTokens')
-  Assert-NoExtraProperties $u $uallowed
-  if ($u.inputTokens -lt 0 -or $u.outputTokens -lt 0 -or $u.reasoningTokens -lt 0) { throw "Negative token counts" }
+  $evidence = $cand.generatorEvidence
+  $evidenceAllowed = @('provider','authMode','model','runId','generatedAtUtc','usage')
+  Assert-NoExtraProperties $evidence $evidenceAllowed
+  if ($evidence.provider -ne 'openai') { throw "generatorEvidence.provider must be openai" }
+  if ($evidence.authMode -ne 'dedicated_public_source_key') { throw "generatorEvidence.authMode must be dedicated_public_source_key" }
+  if ($evidence.runId -notmatch '^[A-Za-z0-9._:-]{1,120}$') { throw "Bad generatorEvidence.runId" }
+  Assert-PublicSafeText $evidence.runId "generatorEvidence.runId"
+  if (-not (Test-ValidDateTime $evidence.generatedAtUtc)) { throw "Bad evidence generatedAtUtc" }
+  $evidenceAge = Get-AgeHours $evidence.generatedAtUtc
+  if ($evidenceAge -gt $MaxCandidateAgeHours -or $evidenceAge -lt 0) { throw "Generator evidence too stale or future" }
+  $usage = $evidence.usage
+  $usageAllowed = @('inputTokens','outputTokens','reasoningTokens')
+  Assert-NoExtraProperties $usage $usageAllowed
 
   $digest = Get-DeterministicDigest $cand
   if ($digests.ContainsKey($cand.candidateId)) { throw "Duplicate candidateId" }
   $digests[$cand.candidateId] = $digest
-
-  $existing = $false
-  foreach ($o in $index.officialSources) { if ($o.id -eq $cand.candidateId) { $existing = $true; break } }
-  if ($existing) {
-    Write-Host "IDEMPOTENT: $($cand.candidateId) digest=$digest"
+  $exists = @($index.officialSources | Where-Object { $_.id -eq $cand.candidateId }).Count -gt 0
+  if ($exists) {
+    Write-Host "EXISTING-ID: $($cand.candidateId) digest=$digest"
   } else {
     Write-Host "VALID: $($cand.candidateId) digest=$digest"
   }
+  $validationCandidates.Add([ordered]@{ candidateId = [string]$cand.candidateId; digest = $digest })
   $validCount++
+}
+
+if (-not [string]::IsNullOrWhiteSpace($ValidationResultPath)) {
+  $candidateIds = [string[]]@($validationCandidates | ForEach-Object { $_.candidateId })
+  [Array]::Sort($candidateIds, [StringComparer]::Ordinal)
+  $result = [ordered]@{
+    schema = 'technical-source-candidate-validation-result/v1'
+    destination = $routing.destination
+    candidates = @($validationCandidates)
+    batchDigest = Get-Sha256 ($candidateIds -join [char]10)
+  }
+  $result | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $ValidationResultPath
 }
 
 Write-Host "Feed validation passed: $validCount candidate(s)"

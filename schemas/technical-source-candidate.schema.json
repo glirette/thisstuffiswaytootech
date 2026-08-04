@@ -20,7 +20,13 @@
   ],
   "properties": {
     "schema": { "const": "technical-source-candidate/v1" },
-    "candidateId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "candidateId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "minLength": 64,
+      "maxLength": 64,
+      "description": "SHA-256 of destination, normalized topic, summary, and sorted source URLs."
+    },
     "destination": { "const": "glirette/thisstuffiswaytootech" },
     "topicId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
     "title": { "type": "string", "minLength": 8, "maxLength": 140 },

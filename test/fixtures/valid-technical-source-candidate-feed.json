@@ -4,7 +4,7 @@
   "candidates": [
     {
       "schema": "technical-source-candidate/v1",
-      "candidateId": "xai-grok-api-public-reference-20260803",
+      "candidateId": "937f97644b5cdb3e1f22801c0e6dfe2c7c8b6365964a7869978671c96cafe7fa",
       "destination": "glirette/thisstuffiswaytootech",
       "topicId": "ai-api-docs",
       "title": "xAI Grok API Public Reference Pointer",
