@@ -46,7 +46,7 @@
       ],
       "doesNotProve": [
         "Private account access, pricing, quotas, or feature availability for a specific account.",
-        "How any private provider-worker or automation-loop implementation is built."
+        "Any implementation detail beyond the cited public documentation."
       ]
     },
     {
