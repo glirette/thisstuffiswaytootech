@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/schemas/technical-source-candidate-feed.schema.json",
+  "title": "Technical public-authority candidate feed",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "generatedAtUtc", "candidates"],
+  "properties": {
+    "schema": { "const": "technical-source-candidate-feed/v1" },
+    "generatedAtUtc": { "type": "string", "format": "date-time" },
+    "candidates": {
+      "type": "array",
+      "maxItems": 20,
+      "items": { "$ref": "technical-source-candidate.schema.json" }
+    }
+  }
+}

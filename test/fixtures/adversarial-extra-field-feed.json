@@ -1,0 +1,6 @@
+{
+  "schema": "technical-source-candidate-feed/v1",
+  "generatedAtUtc": "2026-08-03T10:00:00Z",
+  "candidates": [],
+  "extraUnknownField": "should-fail"
+}
