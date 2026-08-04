@@ -155,6 +155,31 @@
       ]
     },
     {
+      "id": "twilio-xai-telecom-deployment-source-trail",
+      "title": "Twilio And xAI Telecom Deployment Source Trail",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-07-31",
+      "urls": [
+        "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech/sip",
+        "https://www.twilio.com/docs/sip-trunking",
+        "https://www.twilio.com/docs/sip-trunking/troubleshooting",
+        "https://www.twilio.com/docs/sip-trunking/scale-and-limits",
+        "https://www.twilio.com/docs/messaging/services",
+        "https://www.twilio.com/docs/messaging/compliance/a2p-10dlc/direct-standard-onboarding",
+        "https://www.twilio.com/docs/whatsapp/register-senders-using-api"
+      ],
+      "supports": [
+        "A public-safe source trail for Twilio Elastic SIP origination and xAI Direct SIP number routing.",
+        "A source-backed explanation of Twilio dynamic versus fixed SIP user parts and the shared lab-number anchor anti-pattern.",
+        "A reusable validation posture that keeps voice, SMS/A2P, and WhatsApp configuration planes separate."
+      ],
+      "doesNotProve": [
+        "That a private Twilio or xAI account is configured correctly or has required entitlements.",
+        "That the shared host-only Twilio/xAI composition works in a specific account before a controlled nonmatching-DID test.",
+        "Any private phone number, provider identifier, prompt, transfer destination, customer record, or production topology."
+      ]
+    },
+    {
       "id": "github-repo-and-actions-governance-source-trail",
       "title": "GitHub Repository And Actions Governance Source Trail",
       "sourceType": "official_vendor_docs",
@@ -572,6 +597,11 @@
       "title": "xAI Voice Agent API Source Trail",
       "path": "docs/xai-voice-agent-api-source-trail.md",
       "useFor": "Public-safe source trail for xAI Voice Agent API, ephemeral token, pricing, and SIP/Twilio telephony documentation."
+    },
+    {
+      "title": "Twilio And xAI Telecom Deployment Source Trail",
+      "path": "docs/twilio-xai-telecom-deployment-source-trail.md",
+      "useFor": "Public-safe architecture and source trail for per-DID voice routing, independent messaging planes, validation, diagnostics, rollback, and number lifecycle."
     },
     {
       "title": "GitHub Repository And Actions Governance Source Trail",
