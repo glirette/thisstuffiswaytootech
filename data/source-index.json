@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-08-01",
+  "dateModified": "2026-08-04",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -46,7 +46,7 @@
       ],
       "doesNotProve": [
         "Private account access, pricing, quotas, or feature availability for a specific account.",
-        "How any private GregOS, provider-worker, or automation-loop implementation is built."
+        "How any private provider-worker or automation-loop implementation is built."
       ]
     },
     {
