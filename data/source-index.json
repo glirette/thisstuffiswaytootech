@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-08-01",
+  "dateModified": "2026-08-08",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -135,7 +135,8 @@
         "https://www.twilio.com/docs/sip-trunking/scale-and-limits",
         "https://www.twilio.com/docs/messaging/services",
         "https://www.twilio.com/docs/messaging/compliance/a2p-10dlc/direct-standard-onboarding",
-        "https://www.twilio.com/docs/whatsapp/register-senders-using-api"
+        "https://www.twilio.com/docs/whatsapp/register-senders-using-api",
+        "https://www.twilio.com/docs/usage/manage-unused-resources"
       ],
       "supports": [
         "A public-safe source trail for Twilio Elastic SIP origination and xAI Direct SIP number routing.",
