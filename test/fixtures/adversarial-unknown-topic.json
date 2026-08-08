@@ -1,0 +1,25 @@
+{
+  "schema": "technical-source-candidate-feed/v1",
+  "generatedAtUtc": "2026-08-03T10:00:00Z",
+  "candidates": [
+    {
+      "schema": "technical-source-candidate/v1",
+      "candidateId": "bad-topic",
+      "destination": "glirette/thisstuffiswaytootech",
+      "topicId": "unknown-topic-xyz",
+      "title": "Bad Topic",
+      "summary": "Topic not routed in public-authority-routing.json",
+      "reviewedAtUtc": "2026-08-03T09:30:00Z",
+      "recheckBeforeUse": false,
+      "sources": [
+        {"url": "https://docs.x.ai/docs/overview", "title": "x", "publisher": "xai", "kind": "official_vendor_docs", "reviewedAtUtc": "2026-08-03T09:00:00Z", "supports": "s"}
+      ],
+      "supports": ["s1"],
+      "doesNotProve": ["d1"],
+      "generatorEvidence": {
+        "provider": "openai", "authMode": "dedicated_public_source_key", "model": "m", "runId": "r", "generatedAtUtc": "2026-08-03T09:45:00Z",
+        "usage": {"inputTokens": 1, "outputTokens": 1, "reasoningTokens": 0}
+      }
+    }
+  ]
+}

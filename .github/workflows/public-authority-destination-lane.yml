@@ -1,0 +1,244 @@
+name: public-authority-destination-lane
+
+"on":
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - '.github/workflows/public-authority-destination-lane.yml'
+      - 'data/public-authority-*.json'
+      - 'schemas/technical-source-candidate*.json'
+      - 'scripts/fetch-public-authority-feed.py'
+      - 'scripts/test-fetch-public-authority-feed.py'
+      - 'scripts/materialize-public-authority-candidate.ps1'
+      - 'scripts/test-validate-technical-source-candidate-feed.ps1'
+      - 'scripts/validate-technical-source-candidate-feed.ps1'
+      - 'test/fixtures/**'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate public authority contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          pwsh -NoProfile -File scripts/test-validate-technical-source-candidate-feed.ps1
+          python3 scripts/test-fetch-public-authority-feed.py
+
+  promote:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: public-authority-destination-promotion
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fail closed unless activation variables are present
+        shell: bash
+        env:
+          FEED_URL: ${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}
+          PR_CREATION_ENABLED: ${{ vars.PUBLIC_AUTHORITY_PR_CREATION_ENABLED }}
+        run: |
+          set -euo pipefail
+          if [ -z "$FEED_URL" ]; then
+            echo "PUBLIC_AUTHORITY_CANDIDATE_FEED_URL not set; failing closed before fetch"
+            exit 1
+          fi
+          if [ "$PR_CREATION_ENABLED" != "true" ]; then
+            echo "PUBLIC_AUTHORITY_PR_CREATION_ENABLED != true; failing closed before mutation"
+            exit 1
+          fi
+
+      - name: Preflight GitHub Actions pull-request policy
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          policy="$(gh api "repos/$GITHUB_REPOSITORY/actions/permissions/workflow")"
+          if [ "$(jq -r '.can_approve_pull_request_reviews' <<<"$policy")" != "true" ]; then
+            echo "Destination prerequisite can_approve_pull_request_reviews is false; failing closed"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Prepare bounded work directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .authority-work data/source-trails
+
+      - name: Fetch reviewed public HTTPS candidate feed
+        shell: bash
+        env:
+          FEED_URL: ${{ vars.PUBLIC_AUTHORITY_CANDIDATE_FEED_URL }}
+        run: |
+          set -euo pipefail
+          python3 scripts/fetch-public-authority-feed.py --url "$FEED_URL" --output .authority-work/feed.json
+
+      - name: Validate feed before any candidate mutation
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -File scripts/validate-technical-source-candidate-feed.ps1 -FeedPath .authority-work/feed.json -ValidationResultPath .authority-work/validation.json
+
+      - name: Reconcile or create one stable draft promotion
+        id: promotion
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          validation=.authority-work/validation.json
+          candidate_count="$(jq '.candidates | length' "$validation")"
+          batch_digest="$(jq -r '.batchDigest' "$validation")"
+          branch="authority/technical-$batch_digest"
+          mkdir -p .authority-work
+
+          write_evidence() {
+            local action="$1"
+            local pr_url=""
+            if [ "$#" -gt 1 ]; then pr_url="$2"; fi
+            jq -n \
+              --arg action "$action" \
+              --arg branch "$branch" \
+              --arg batchDigest "$batch_digest" \
+              --arg prUrl "$pr_url" \
+              --arg atUtc "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              --argjson candidateCount "$candidate_count" \
+              '{
+                action: $action,
+                type: "promotion-only",
+                branch: $branch,
+                batchDigest: $batchDigest,
+                candidateCount: $candidateCount,
+                pullRequestUrl: $prUrl,
+                atUtc: $atUtc,
+                publicationAcknowledgment: "A reviewed GitHub merge to main is the only publication acknowledgment."
+              }' > .authority-work/compact-evidence.json
+          }
+
+          verify_branch_candidates() {
+            local candidate_branch="$1"
+            while IFS=$'\t' read -r candidate_id expected_digest; do
+              local trail
+              trail="$(git show "origin/$candidate_branch:data/source-trails/$candidate_id.json")" || {
+                echo "Existing authority branch is missing expected trail for $candidate_id"
+                return 1
+              }
+              if [ "$(jq -r '.candidateId // empty' <<<"$trail")" != "$candidate_id" ] ||
+                 [ "$(jq -r '.digest // empty' <<<"$trail")" != "$expected_digest" ]; then
+                echo "Existing authority branch does not match the validated candidate digest"
+                return 1
+              fi
+            done < <(jq -r '.candidates[] | [.candidateId, .digest] | @tsv' "$validation")
+          }
+
+          all_candidates_materialized_on_main() {
+            local source_index
+            source_index="$(git show HEAD:data/source-index.json)" || return 1
+            while IFS=$'\t' read -r candidate_id expected_digest; do
+              local trail
+              trail="$(git show "HEAD:data/source-trails/$candidate_id.json")" || return 1
+              if [ "$(jq -r '.candidateId // empty' <<<"$trail")" != "$candidate_id" ] ||
+                 [ "$(jq -r '.digest // empty' <<<"$trail")" != "$expected_digest" ] ||
+                 ! git cat-file -e "HEAD:docs/$candidate_id.md" 2>/dev/null ||
+                 [ "$(jq --arg id "$candidate_id" '[.officialSources[]? | select(.id == $id)] | length' <<<"$source_index")" != "1" ]; then
+                return 1
+              fi
+            done < <(jq -r '.candidates[] | [.candidateId, .digest] | @tsv' "$validation")
+          }
+
+          if [ "$candidate_count" = "0" ]; then
+            write_evidence "no-op-empty-feed"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if all_candidates_materialized_on_main; then
+            write_evidence "no-op-already-materialized"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          existing_prs="$(gh pr list --state all --base main --head "$branch" --json number,url,state,createdAt)"
+          existing_count="$(jq 'length' <<<"$existing_prs")"
+          if [ "$existing_count" -gt 1 ]; then
+            echo "Multiple pull requests share a stable authority branch; refusing to continue"
+            exit 1
+          fi
+          if [ "$existing_count" = "1" ]; then
+            state="$(jq -r '.[0].state' <<<"$existing_prs")"
+            pr_url="$(jq -r '.[0].url' <<<"$existing_prs")"
+            if [ "$state" != "OPEN" ]; then
+              echo "Stable authority branch has a non-open pull request; deliberate operator action is required"
+              exit 1
+            fi
+            git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch"
+            verify_branch_candidates "$branch"
+            write_evidence "reconciled-existing-draft" "$pr_url"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          while IFS=$'\t' read -r other_branch other_pr; do
+            git fetch origin "refs/heads/$other_branch:refs/remotes/origin/$other_branch"
+            while IFS=$'\t' read -r candidate_id _; do
+              if git cat-file -e "origin/$other_branch:data/source-trails/$candidate_id.json" 2>/dev/null; then
+                echo "Candidate $candidate_id is already covered by open draft $other_pr; refusing a duplicate promotion"
+                exit 1
+              fi
+            done < <(jq -r '.candidates[] | [.candidateId, .digest] | @tsv' "$validation")
+          done < <(gh pr list --state open --base main --limit 100 --json headRefName,url --jq '.[] | select(.headRefName | startswith("authority/technical-")) | [.headRefName, .url] | @tsv')
+
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch"
+            verify_branch_candidates "$branch"
+            pr_url="$(gh pr create --draft --head "$branch" --base main \
+              --title "Public authority: promote $candidate_count technical candidate(s)" \
+              --body "Validated public-safe technical source candidates. Draft PR; source URLs must be rechecked before merge. A reviewed GitHub merge to main is the only publication acknowledgment.")"
+            write_evidence "recovered-existing-branch" "$pr_url"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          pwsh -NoProfile -File scripts/materialize-public-authority-candidate.ps1 -FeedPath .authority-work/feed.json
+          if git diff --quiet -- data/source-index.json data/public-authority-publication-health.json docs/ data/source-trails/; then
+            write_evidence "no-op-already-materialized"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --create "$branch"
+          git add -- data/source-index.json data/public-authority-publication-health.json docs/ data/source-trails/
+          git commit -m "chore(authority): promote validated technical source candidates"
+          git push --set-upstream origin "$branch"
+          pr_url="$(gh pr create --draft --head "$branch" --base main \
+            --title "Public authority: promote $candidate_count technical candidate(s)" \
+            --body "Validated public-safe technical source candidates. Draft PR; source URLs must be rechecked before merge. A reviewed GitHub merge to main is the only publication acknowledgment.")"
+          write_evidence "created-draft-promotion" "$pr_url"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Upload compact promotion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-authority-evidence
+          path: .authority-work/compact-evidence.json
+          retention-days: 90

@@ -1,0 +1,32 @@
+{
+  "schema": "technical-source-candidate-feed/v1",
+  "generatedAtUtc": "2026-08-03T10:00:00Z",
+  "candidates": [{
+    "schema": "technical-source-candidate/v1",
+    "candidateId": "private-summary-rejection-20260803",
+    "destination": "glirette/thisstuffiswaytootech",
+    "topicId": "ai-api-docs",
+    "title": "Private content rejection fixture",
+    "summary": "This must fail because it embeds AccountKey=not-a-real-secret in public text.",
+    "reviewedAtUtc": "2026-08-03T09:30:00Z",
+    "recheckBeforeUse": true,
+    "sources": [{
+      "url": "https://docs.x.ai/docs/overview",
+      "title": "xAI API Overview",
+      "publisher": "xai",
+      "kind": "official_vendor_docs",
+      "reviewedAtUtc": "2026-08-03T09:00:00Z",
+      "supports": "Official public documentation entry point."
+    }],
+    "supports": ["Public documentation is the controlling source."],
+    "doesNotProve": ["Private account access or entitlement is not proven."],
+    "generatorEvidence": {
+      "provider": "openai",
+      "authMode": "dedicated_public_source_key",
+      "model": "gpt-5-mini",
+      "runId": "run_public_fixture",
+      "generatedAtUtc": "2026-08-03T09:45:00Z",
+      "usage": { "inputTokens": 1, "outputTokens": 1, "reasoningTokens": 0 }
+    }
+  }]
+}

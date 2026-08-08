@@ -1,0 +1,6 @@
+{
+  "schema": "technical-public-authority-publication-health/v1",
+  "lastSuccessfulPromotionAtUtc": null,
+  "publicationBoundary": "A candidate becomes canonical public authority only when its reviewed pull request is merged to main; GitHub's merged pull request is the publication acknowledgment.",
+  "recentPromotions": []
+}

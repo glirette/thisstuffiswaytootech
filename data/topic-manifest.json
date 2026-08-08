@@ -12,6 +12,7 @@
       "publicScope": "Official API docs, model/API surface changes, source links, and public-safe implementation gotchas.",
       "starterSources": [
         "openai-responses-api-reference",
+        "openai-codex-stream-disconnection-recovery-source-trail",
         "ai-provider-model-selection-source-trail",
         "xai-voice-agent-api-source-trail"
       ],
