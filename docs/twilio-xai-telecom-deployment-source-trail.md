@@ -18,6 +18,7 @@ This note contains no private phone numbers, provider identifiers, credentials, 
 - Twilio Messaging Services: https://www.twilio.com/docs/messaging/services
 - Twilio A2P 10DLC onboarding: https://www.twilio.com/docs/messaging/compliance/a2p-10dlc/direct-standard-onboarding
 - Twilio WhatsApp sender registration: https://www.twilio.com/docs/whatsapp/register-senders-using-api
+- Twilio unused-resource management: https://www.twilio.com/docs/usage/manage-unused-resources
 
 Recheck current documentation before an operational change. Console options, API fields, limits, pricing, and provider behavior can change.
 
@@ -74,7 +75,7 @@ A common pilot sequence can create an accidental dependency:
 1. Configure the first lab DID as a fixed SIP user part.
 2. Validate the lab call.
 3. Attach more DIDs to the same trunk because it already works.
-4. Observe every SIP `To` value showing the lab identity.
+4. Observe the SIP Request-URI user part showing the lab identity; treat `To` and `Diversion` as separate corroborating headers.
 
 The carrier is behaving correctly: the configuration instructed it to reuse the fixed user part. The lab DID has become an internal routing anchor even though it is not the public or primary number.
 
@@ -140,8 +141,8 @@ Use labels and environment-safe references in public material. Keep credentials,
 For each controlled call, verify:
 
 - the incoming-number field identifies the dialed DID;
-- the SIP request `To` user part contains that same DID;
-- the SIP `Diversion` header agrees when inspected;
+- the SIP Request-URI user part contains that same DID;
+- the SIP `To` and `Diversion` headers agree when inspected as separate corroboration;
 - the intended provider registration and agent answer;
 - stable two-way audio and caller interruption;
 - hangup and transfer behavior where configured; and
@@ -153,12 +154,12 @@ Correlate parent and child call identifiers privately, particularly when transfe
 
 | Symptom | First checks |
 | --- | --- |
-| Every SIP `To` shows one DID | Look for a fixed user part in the shared Twilio origination URI |
-| Correct incoming DID, wrong agent | Compare SIP `To` with the voice provider's registered DID and agent assignment |
+| Every SIP Request-URI shows one DID | Look for a fixed user part in the shared Twilio origination URI |
+| Correct incoming DID, wrong agent | Compare the SIP Request-URI user part with the voice provider's registered DID and agent assignment; use `To` and `Diversion` only as corroboration |
 | Greeting only or silence | Check model/session behavior, media negotiation, and provider call events separately |
 | One-way audio | Inspect RTP destination, NAT behavior, codecs, TLS/SRTP posture, and packet counters |
 | Transfer fails | Inspect SIP REFER settings, transfer target, child leg, status code, and post-answer media |
-| Logs disagree about entry number | Prefer the incoming-number resource and `Called Via`; then reconcile SIP `To` and `Diversion` |
+| Logs disagree about entry number | Prefer the incoming-number resource and `Called Via`; then reconcile the SIP Request-URI user part, `To`, and `Diversion` |
 
 Do not compensate for a transport or topology error by making the conversational prompt more complex.
 
@@ -182,9 +183,9 @@ A reusable runbook should describe provider-neutral invariants first and put cli
 
 ## Number Lifecycle
 
-Low-cost DIDs can have option value as labs, geographic entry points, vanity numbers, quarantined legacy lines, or future service channels. Releasing a number is destructive because it can be reassigned.
+Low-cost DIDs can have option value as labs, geographic entry points, vanity numbers, quarantined legacy lines, or future service channels. Twilio documents a released-numbers view and a short restoration window for eligible releases; release removes the number from the account and must be treated as destructive.
 
-Before release, confirm no voice, messaging, WhatsApp, verification, emergency, public listing, printed, stored-customer, vanity, geographic, lab, or failover dependency remains. Use a cooling-off period after detachment and require explicit approval naming the exact DID. Zero recent traffic alone is not sufficient evidence.
+Before release, confirm no voice, messaging, WhatsApp, verification, emergency, public listing, printed, stored-customer, vanity, geographic, lab, or failover dependency remains. As an operational recommendation—not a Twilio policy—use a cooling-off period after detachment and require explicit approval naming the exact DID. Zero recent traffic alone is not sufficient evidence.
 
 ## What The Sources Do Not Prove
 
