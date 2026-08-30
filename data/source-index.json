@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-08-08",
+  "dateModified": "2026-08-29",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -31,6 +31,32 @@
     }
   ],
   "officialSources": [
+    {
+      "id": "joggai-video-api-source-trail",
+      "title": "JoggAI Video API And SmartVideo Source Trail",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-08-29",
+      "urls": [
+        "https://docs.jogg.ai/codex",
+        "https://docs.jogg.ai/codex/install",
+        "https://docs.jogg.ai/api-reference/v2/QuickStart/GettingStarted",
+        "https://docs.jogg.ai/api-reference/v2/User/GetUserInfo",
+        "https://docs.jogg.ai/api-reference/v2/API%20Documentation/WebhookIntegration",
+        "https://docs.jogg.ai/api-reference/v2/QuickStart/ErrorHandling",
+        "https://docs.jogg.ai/api-reference/v2/QuickStart/RateLimits",
+        "https://docs.jogg.ai/llms.txt"
+      ],
+      "supports": [
+        "Official JoggAI documentation pointers for the SmartVideo Codex plugin and API v2 as separate integration surfaces.",
+        "A source trail for x-api-key authentication, read-only account validation, webhook HMAC-SHA256 verification, asynchronous video results, retries, idempotency, rate limits, errors, and pricing checks.",
+        "A public-safe reminder to re-check current JoggAI documentation before implementation or paid automation."
+      ],
+      "doesNotProve": [
+        "That any private account has API access, credits, working credentials, or a particular plan.",
+        "That the SmartVideo plugin or a private API/webhook deployment is installed, configured, secure, or working.",
+        "Any private infrastructure, credential, endpoint, workflow, cost ceiling, or production topology."
+      ]
+    },
     {
       "id": "openai-responses-api-reference",
       "title": "OpenAI Responses API Reference",
@@ -554,6 +580,11 @@
     }
   ],
   "relatedFiles": [
+    {
+      "title": "JoggAI Video API And SmartVideo Source Trail",
+      "path": "docs/joggai-video-api-source-trail.md",
+      "useFor": "Public-safe official source trail distinguishing JoggAI SmartVideo local authoring from API v2 authentication, webhooks, status, limits, and pricing references."
+    },
     {
       "title": "Topic Manifest",
       "path": "data/topic-manifest.json",
