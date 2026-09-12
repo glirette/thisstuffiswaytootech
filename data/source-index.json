@@ -36,6 +36,7 @@
       "title": "JoggAI Video API And SmartVideo Source Trail",
       "sourceType": "official_vendor_docs",
       "capturedAt": "2026-08-29",
+      "reviewedAt": "2026-09-12",
       "urls": [
         "https://docs.jogg.ai/codex",
         "https://docs.jogg.ai/codex/install",
@@ -44,11 +45,12 @@
         "https://docs.jogg.ai/api-reference/v2/API%20Documentation/WebhookIntegration",
         "https://docs.jogg.ai/api-reference/v2/QuickStart/ErrorHandling",
         "https://docs.jogg.ai/api-reference/v2/QuickStart/RateLimits",
-        "https://docs.jogg.ai/llms.txt"
+        "https://docs.jogg.ai/llms.txt",
+        "https://learn.microsoft.com/en-us/dotnet/api/azure.storage.queues.queueclient.sendmessageasync?view=azure-dotnet"
       ],
       "supports": [
         "Official JoggAI documentation pointers for the SmartVideo Codex plugin and API v2 as separate integration surfaces.",
-        "A source trail for x-api-key authentication, read-only account validation, webhook HMAC-SHA256 verification, asynchronous video results, retries, idempotency, rate limits, errors, and pricing checks.",
+        "A source trail for x-api-key authentication, read-only account validation, webhook HMAC-SHA256 verification, asynchronous video results, retries, idempotency, rate limits, errors, pricing checks, and the Azure Queue Storage encoded-message ceiling.",
         "A public-safe reminder to re-check current JoggAI documentation before implementation or paid automation."
       ],
       "doesNotProve": [

@@ -1,6 +1,7 @@
 # JoggAI Video API And SmartVideo Source Trail
 
 Captured: 2026-08-29
+Reviewed: 2026-09-12
 
 ## Purpose
 
@@ -52,6 +53,16 @@ Official sources:
 
 The webhook secret is returned when an endpoint is registered. Public documentation examples are not credentials and should never be reused as secrets.
 
+## Azure Queue Storage transport constraint
+
+Microsoft's .NET Queue Storage API reference says the encoded queue message can be at most 64 KiB. When a queue client uses Base64 message encoding, the Base64 representation of the complete envelope—not only the provider's raw body—must fit that ceiling.
+
+Official source:
+
+- [Azure Queue Storage `SendMessageAsync`](https://learn.microsoft.com/en-us/dotnet/api/azure.storage.queues.queueclient.sendmessageasync?view=azure-dotnet)
+
+A webhook receiver that places the full body inside a JSON envelope should therefore enforce a smaller raw-body limit or use an owned Blob-pointer pattern. The exact limit is an implementation decision based on envelope and encoding overhead; Microsoft does not prescribe a particular webhook-body limit.
+
 ## Asynchronous and cost-aware posture
 
 JoggAI documents video creation as an asynchronous API workflow with later status/result retrieval or webhook delivery. The error documentation lists business codes for invalid keys, insufficient credit, missing permission, parameter errors, and system errors. The rate-limit page documents a POST limit that should be re-checked before automation.
@@ -72,12 +83,14 @@ A conservative implementation should persist the provider task/video ID, disting
 - The `x-api-key` server authentication pattern and read-only account probe endpoint.
 - The documented raw-body HMAC-SHA256 webhook verification contract.
 - The five-second acknowledgement, retry, and idempotency posture documented for webhooks.
+- The 64 KiB encoded-message ceiling documented for Azure Queue Storage.
 - The need to check current pricing, rate limits, error codes, and result/status endpoints before enabling automated video generation.
 
 ## What these sources do not prove
 
 - That any private account has API access, credits, a working key, or a particular plan.
 - That a private webhook, host, queue, storage account, or deployment is configured correctly.
+- That a particular raw webhook-body limit is universally correct; it depends on the queue envelope and encoding.
 - That the SmartVideo plugin is installed or authenticated on a particular machine.
 - That a specific video workflow is economical, legally appropriate, brand-safe, or production-ready.
 - That dated pricing, limits, events, payload fields, or plugin behavior remain unchanged; re-check current official documentation.
