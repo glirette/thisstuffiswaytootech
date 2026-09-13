@@ -86,18 +86,21 @@
       "sourceType": "official_vendor_docs",
       "capturedAt": "2026-09-13",
       "urls": [
-        "https://learn.chatgpt.com/use-cases/follow-goals"
+        "https://learn.chatgpt.com/use-cases/follow-goals",
+        "https://developers.openai.com/api/docs/guides/latest-model"
       ],
       "supports": [
         "OpenAI documents /goal as a durable objective for long-running Codex work.",
         "OpenAI describes /goal for work that should continue across turns toward a verifiable stopping condition.",
-        "A public-safe source trail that avoids repeating a general documentation search for this feature."
+        "A public-safe source trail that avoids repeating a general documentation search for this feature.",
+        "A follow-up chat identified OpenAI's Model guidance as a source about explicit instruction precedence and conflict auditing; that supplied summary requires re-checking before implementation reliance."
       ],
       "doesNotProve": [
         "That /goal is mandatory for sustained work.",
         "That /goal replaces or overrides repository-specific AGENTS.md instructions or durable work-management rules.",
         "That /goal broadens user authorization or removes approval boundaries.",
-        "That every Codex surface, account, or version exposes identical goal behavior."
+        "That every Codex surface, account, or version exposes identical goal behavior.",
+        "That a particular global instruction or skill exception has been installed, loaded, or given the intended precedence."
       ]
     },
     {
