@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Topic Manifest",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-08-01",
+  "dateModified": "2026-09-13",
   "purpose": "Machine-readable map of public-safe technical topics this repository may cache and the boundaries that keep private operations out of public notes.",
   "canonicalSourceIndex": "https://raw.githubusercontent.com/glirette/thisstuffiswaytootech/main/data/source-index.json",
   "topics": [
@@ -14,7 +14,8 @@
         "openai-responses-api-reference",
         "openai-codex-stream-disconnection-recovery-source-trail",
         "ai-provider-model-selection-source-trail",
-        "xai-voice-agent-api-source-trail"
+        "xai-voice-agent-api-source-trail",
+        "opencode-openrouter-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
@@ -28,7 +29,8 @@
       "publicScope": "Official provider model docs, pricing-doc pointers, authenticated-catalog refresh posture, and public-safe model/source cache shape.",
       "starterSources": [
         "ai-provider-model-selection-source-trail",
-        "openai-model-release-rumor-checks"
+        "openai-model-release-rumor-checks",
+        "opencode-openrouter-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
