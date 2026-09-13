@@ -2,7 +2,7 @@
   "name": "thisstuffiswaytootech Source Index",
   "site": "github.com/glirette/thisstuffiswaytootech",
   "schemaVersion": "0.1",
-  "dateModified": "2026-08-08",
+  "dateModified": "2026-09-13",
   "purpose": "Public-safe source index for reusable technical documentation trails and official-source pointers.",
   "sourceAttribution": {
     "sourceName": "thisstuffiswaytootech",
@@ -78,6 +78,26 @@
         "That task content, context size, a repository, or malformed model-event JSON caused this exact response-body error.",
         "That a retry is safe without application-specific state, ownership, and side-effect checks.",
         "How any private automation wrapper, execution environment, repository, or deployment is implemented."
+      ]
+    },
+    {
+      "id": "openai-codex-follow-goals-source-trail",
+      "title": "OpenAI Codex Follow-Goals Source Trail",
+      "sourceType": "official_vendor_docs",
+      "capturedAt": "2026-09-13",
+      "urls": [
+        "https://learn.chatgpt.com/use-cases/follow-goals"
+      ],
+      "supports": [
+        "OpenAI documents /goal as a durable objective for long-running Codex work.",
+        "OpenAI describes /goal for work that should continue across turns toward a verifiable stopping condition.",
+        "A public-safe source trail that avoids repeating a general documentation search for this feature."
+      ],
+      "doesNotProve": [
+        "That /goal is mandatory for sustained work.",
+        "That /goal replaces or overrides repository-specific AGENTS.md instructions or durable work-management rules.",
+        "That /goal broadens user authorization or removes approval boundaries.",
+        "That every Codex surface, account, or version exposes identical goal behavior."
       ]
     },
     {
@@ -588,6 +608,11 @@
       "title": "OpenAI Codex Stream-Disconnection Recovery Source Trail",
       "path": "docs/openai-codex-stream-disconnection-recovery-source-trail.md",
       "useFor": "Public-safe source trail for Codex streaming disconnect diagnosis, observability limits, and bounded recovery posture."
+    },
+    {
+      "title": "OpenAI Codex Follow-Goals Source Trail",
+      "path": "docs/openai-codex-follow-goals-source-trail.md",
+      "useFor": "Public-safe source trail for locating OpenAI's /goal guidance without treating it as a replacement for repository-specific operating rules."
     },
     {
       "title": "AI Provider Model Source Cache",
