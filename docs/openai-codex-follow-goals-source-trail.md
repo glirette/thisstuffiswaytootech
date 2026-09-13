@@ -14,6 +14,12 @@ The search used the query `Codex app goals continue task automatically site:deve
 
 - OpenAI, [Follow a goal](https://learn.chatgpt.com/use-cases/follow-goals)
 
+## Follow-Up Search Result Supplied From Another Chat
+
+- OpenAI, [Model guidance](https://developers.openai.com/api/docs/guides/latest-model)
+
+The separate chat reported that this page recommends making precedence among user instructions, skills, and files such as `AGENTS.md` explicit and auditing conflicting instructions. That chat's result is cached here as supplied; this task did not repeat or independently re-open the search. Re-check the page before relying on that summarized claim for implementation.
+
 ## What The Source Supports
 
 - `/goal` gives Codex a durable objective for long-running work.
@@ -26,6 +32,7 @@ The search used the query `Codex app goals continue task automatically site:deve
 - It does not say that `/goal` replaces or overrides repository-specific `AGENTS.md` instructions, durable issues, branches, pull requests, queues, or other established operating rules.
 - It does not authorize Codex to exceed the user's task scope, perform gated external actions, or ignore approval boundaries.
 - It does not establish that every Codex surface, account, version, or deployment exposes identical goal behavior.
+- The supplied Model guidance summary does not, by itself, establish that a particular global instruction or skill exception has been installed, loaded, or given the intended precedence.
 
 ## Recheck Rule
 
