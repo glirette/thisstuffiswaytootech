@@ -22,10 +22,11 @@ First-party sources include official vendor documentation, official project repo
 
 Ordinary chat must not begin with generic web search. Before an external web or
 browser lookup, read the applicable `AGENTS.md` chain, search the owning repo,
-then search both this repository and
+then search this repository and, when relevant and accessible,
 `glirette/NotaryGeekPublicKnowledgeWorker`. The second cache covers notarial,
 legal, public-source, routing, citation, and answer-quality records that may
-already answer or frame the question.
+already answer or frame the question; its absence or unavailability must not
+block freshness-critical or explicitly requested narrow external research.
 
 Treat generic external search before those checks as a workflow bug. If neither
 cache answers the question, decide whether the gap warrants:
