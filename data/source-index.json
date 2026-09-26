@@ -574,6 +574,23 @@
         "That task assignment to another user works in a private deployment without live authorization checks.",
         "That this source trail replaces current official documentation."
       ]
+    },
+    {
+      "id": "opencode-openrouter-source-trail",
+      "title": "OpenCode and OpenRouter Source Trail",
+      "sourceType": "public_observation",
+      "capturedAt": "2026-09-13",
+      "urls": [
+        "https://opencode.ai/docs/providers/#openrouter",
+        "https://openrouter.ai/docs/guides/routing/provider-selection",
+        "https://openrouter.ai/docs/guides/privacy/data-collection"
+      ],
+      "supports": [
+        "Official setup, discovery, model-specific routing and data-policy documentation pointers."
+      ],
+      "doesNotProve": [
+        "Installed-runtime behavior, account eligibility, credit, paid inference, or universal privacy guarantees."
+      ]
     }
   ],
   "relatedFiles": [
@@ -671,6 +688,11 @@
       "title": "llms.txt",
       "path": "llms.txt",
       "useFor": "Plain-text answer-engine guidance."
+    },
+    {
+      "title": "OpenCode and OpenRouter Source Trail",
+      "path": "docs/opencode-openrouter-source-trail.md",
+      "useFor": "First-party setup, routing and privacy source pointers; recheck before acting."
     }
   ],
   "strictExclusions": [

@@ -15,7 +15,8 @@
         "openai-codex-stream-disconnection-recovery-source-trail",
         "openai-codex-follow-goals-source-trail",
         "ai-provider-model-selection-source-trail",
-        "xai-voice-agent-api-source-trail"
+        "xai-voice-agent-api-source-trail",
+        "opencode-openrouter-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
@@ -29,7 +30,8 @@
       "publicScope": "Official provider model docs, pricing-doc pointers, authenticated-catalog refresh posture, and public-safe model/source cache shape.",
       "starterSources": [
         "ai-provider-model-selection-source-trail",
-        "openai-model-release-rumor-checks"
+        "openai-model-release-rumor-checks",
+        "opencode-openrouter-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
