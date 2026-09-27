@@ -18,6 +18,30 @@ When a task involves a technical claim, product behavior, API surface, SDK behav
 
 First-party sources include official vendor documentation, official project repositories, official changelogs, standards bodies, and platform-owned API references. Avoid treating social posts, forum answers, search snippets, AI answers, or third-party blog posts as controlling sources.
 
+## Repository-First External Research Gate
+
+Ordinary chat must not begin with generic web search. Before an external web or
+browser lookup, read the applicable `AGENTS.md` chain, search the owning repo,
+then search this repository and, when relevant and accessible,
+`glirette/NotaryGeekPublicKnowledgeWorker`. The second cache covers notarial,
+legal, public-source, routing, citation, and answer-quality records that may
+already answer or frame the question; its absence or unavailability must not
+block freshness-critical or explicitly requested narrow external research.
+
+Treat generic external search before those checks as a workflow bug. If neither
+cache answers the question, decide whether the gap warrants:
+
+- a public-safe cache entry here or a knowledge record in the other cache;
+- a durable backlog/source-capture issue for later work;
+- a Playwright/browser reproduction item for observed web behavior; or
+- no durable entry because the need is genuinely transient.
+
+If current external verification is not on the immediate critical path, queue
+the durable work instead of browsing in interactive chat. When freshness,
+sensitivity, observed behavior, or the explicit task requires a lookup now,
+search narrowly, prefer controlling first-party sources, and do not leave a
+reusable result only in chat.
+
 ## Public Boundary
 
 Do not commit:
