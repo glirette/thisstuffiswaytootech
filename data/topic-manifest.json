@@ -15,7 +15,8 @@
         "openai-codex-stream-disconnection-recovery-source-trail",
         "openai-codex-follow-goals-source-trail",
         "ai-provider-model-selection-source-trail",
-        "xai-voice-agent-api-source-trail"
+        "xai-voice-agent-api-source-trail",
+        "joggai-video-api-source-trail"
       ],
       "mustNotInclude": [
         "private provider routing logic",
