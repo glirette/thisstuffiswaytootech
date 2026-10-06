@@ -55,4 +55,4 @@ Current public-safe posture note:
 - For AI model routing, check public provider/model source trails first; official provider docs and fresh authenticated catalogs control model-name, context-window, pricing, and capability claims. Keep private routing and spend policy out of this public cache.
 - For GitHub governance, use official GitHub docs for branch protection, rulesets, required checks, Actions permissions/security, secret scanning, Dependabot, and code scanning before claiming a repo is hardened.
 
-Public boundary: do not publish secrets, customer facts, raw private messages, private automation tactics, provider-worker implementation details, or copyable internal runbooks.
+Public boundary: follow the public publication policy at https://github.com/glirette/thisstuffiswaytootech/blob/main/docs/publication-policy.md . Preserve supported public findings and evidence limits; omit private data and internal-only repository and work identifiers, including provenance metadata.

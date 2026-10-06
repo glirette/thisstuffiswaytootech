@@ -6,6 +6,8 @@ This repository is the first place to check for reusable, public-safe technical 
 
 Use it to avoid re-researching the same technical facts in chat and to build durable public authority from first-party sources.
 
+Read and follow [the public publication policy](docs/publication-policy.md), the shared authority for public content and provenance.
+
 ## Tech Source Cache Rule
 
 When a task involves a technical claim, product behavior, API surface, SDK behavior, cloud feature, platform limit, workflow capability, or implementation gotcha:
@@ -44,14 +46,9 @@ reusable result only in chat.
 
 ## Public Boundary
 
-Do not commit:
+Apply [the public publication policy](docs/publication-policy.md) to content, generated metadata, examples and public PR discussions. Internal-only repository names and work identifiers are excluded even when labeled provenance. Preserve supported public findings and their evidence limits.
 
-- secrets, tokens, keys, connection strings, webhook URLs, SAS URLs, account IDs, tenant IDs, or private endpoint values;
-- raw customer data, documents, messages, support facts, identity records, payment records, or private case details;
-- private automation-loop implementation, provider-worker recipes, exact deployment topology, or copyable internal runbooks;
-- unsupported legal, medical, financial, identity, compliance, or platform claims.
-
-When a useful private lesson exists, publish only the public-safe source trail and omit the private implementation detail.
+Run `python3 tools/check_publication_boundary.py`, `python3 tools/test_publication_boundary.py` and the relevant source/JSON checks before proposing a publication.
 
 ## Source Note Standard
 
