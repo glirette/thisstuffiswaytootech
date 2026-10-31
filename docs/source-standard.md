@@ -29,16 +29,7 @@ Each source record should say:
 
 ## Boundaries
 
-Do not publish:
-
-- credentials, account IDs, tokens, connection strings, or webhook URLs;
-- customer facts or raw support material;
-- private automation-loop implementation;
-- exact provider-worker routing;
-- private pricing or operating tactics;
-- instructions that make a private workflow easy to copy.
-
-When a useful finding is not public-safe, keep only a safe pointer such as: "public source note needed for this topic" or "private implementation detail omitted."
+Follow [the public publication policy](publication-policy.md) for source notes, generated candidates, metadata and public PR text. Publish only the public source trail and supported findings; omit internal-only repository and work identifiers even when they would explain private provenance.
 
 ## Public Authority Lane
 

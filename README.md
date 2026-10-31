@@ -30,13 +30,7 @@ Do include:
 - Notes that help future readers find the right official source faster.
 - High-level gotchas that do not reveal private implementation.
 
-Do not include:
-
-- Secrets, keys, tokens, account IDs, webhook URLs, connection strings, or environment values.
-- Customer facts, documents, messages, or support records.
-- Private automation-loop code or provider-worker implementation details.
-- Exact business tactics, pricing strategy, private runbooks, or copyable operational recipes.
-- Claims that a vendor feature works in a specific private deployment unless the proof is public-safe.
+Follow [the public publication policy](docs/publication-policy.md), the shared rule for supported public findings, source provenance and generated content. It also excludes internal-only repository and work identifiers from public metadata and discussions.
 
 ## Citation Rule
 
