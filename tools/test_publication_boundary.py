@@ -97,6 +97,88 @@ class PublicationBoundaryTests(unittest.TestCase):
                 self.assertTrue(check_text("source.JSON", payload))
         self.assertEqual([], check_text("source.JSON", '{"publicOnly": true}'))
 
+    def test_duplicate_members_retain_all_escaped_content(self):
+        forbidden = r'"glirette\u002fexample-unpublished"'
+        payloads = [
+            '{"url":' + forbidden + ',"url":"public"}',
+            '{"url":"public","url":' + forbidden + '}',
+            '{"outer":{"url":' + forbidden + '},"outer":null}',
+            '{"outer":null,"outer":[{"url":' + forbidden + '}]}',
+            '{"url":' + forbidden + r',"\u0075rl":"public"}',
+            '{' + forbidden + ':null,' + forbidden + ':"public"}',
+            '[{"url":' + forbidden + ',"url":"public"}]',
+        ]
+        for payload in payloads:
+            with self.subTest(payload=payload):
+                self.assertCountEqual([
+                    "source.JsOn: duplicate JSON member",
+                    "source.JsOn: unexpected publisher-owned repository reference",
+                ], check_text("source.JsOn", payload))
+
+    def test_duplicate_members_are_explicit_even_without_a_reference(self):
+        for payload in [
+            '{"same":1,"same":2}',
+            r'{"same":1,"\u0073ame":2}',
+            '{"nested":[{"same":1,"same":2}]}',
+            '{"same":1,"same":2,"child":{"same":3,"same":4}}',
+        ]:
+            with self.subTest(payload=payload):
+                self.assertEqual(["source.json: duplicate JSON member"],
+                                 check_text("source.json", payload))
+        # Equal keys in distinct objects, case-distinct keys and arrays are valid.
+        for payload in ['[{"same":1},{"same":2}]', '{"same":1,"Same":2}',
+                        '[[],["same",1],["same",2],{}]']:
+            with self.subTest(payload=payload):
+                self.assertEqual([], check_text("source.json", payload))
+
+    def test_overwritten_subtrees_still_receive_metadata_checks(self):
+        payload = (r'{"outer":{"private\u0052evision":"synthetic"},'
+                   r'"outer":{"document\u0047enerated":false},"outer":null}')
+        self.assertCountEqual([
+            "source.json: duplicate JSON member",
+            "source.json: internal provenance or production metadata field",
+            "source.json: internal provenance or production metadata field",
+        ], check_text("source.json", payload))
+
+    def test_unicode_escapes_at_every_allowed_name_position(self):
+        for name in ["thisstuffiswaytootech", "NotaryGeekPublicKnowledgeWorker"]:
+            for index, char in enumerate(name):
+                escaped_name = name[:index] + f"\\u{ord(char):04x}" + name[index + 1:]
+                reference = "https://github.com/glirette/" + escaped_name + "/pull/1"
+                for payload in ['{"url":"' + reference + '"}',
+                                '{"' + reference + '":"public"}',
+                                '[{"nested":["' + reference + '"]}]']:
+                    with self.subTest(name=name, index=index, payload=payload):
+                        self.assertEqual([], check_text("source.JsOn", payload))
+
+    def test_escaped_name_does_not_allow_unlisted_prefix_or_suffix(self):
+        for name in [r'thisstuffiswaytoo\u0074ech-extra',
+                     r'prefix-thisstuffiswaytoo\u0074ech',
+                     r'example-\u0075npublished']:
+            reference = "glirette/" + name
+            for payload in ['{"url":"' + reference + '"}',
+                            '{"' + reference + '":null}']:
+                with self.subTest(payload=payload):
+                    self.assertEqual([
+                        "source.json: unexpected publisher-owned repository reference"
+                    ], check_text("source.json", payload))
+
+    def test_raw_fallback_and_two_pass_percent_detection_remain(self):
+        reference = "glirette/" + "example-unpublished"
+        for encoded in [reference, reference.replace("/", "%2F"),
+                        reference.replace("/", "%252F")]:
+            for path, text in [("source.md", encoded),
+                               ("source.json", json.dumps({"url": encoded})),
+                               ("source.JsOn", '{"url":"' + encoded + '"')]:
+                with self.subTest(path=path, text=text):
+                    findings = check_text(path, text)
+                    self.assertIn(
+                        f"{path}: unexpected publisher-owned repository reference",
+                        findings,
+                    )
+                    if text.startswith('{"url":') and not text.endswith('}'):
+                        self.assertIn(f"{path}: invalid JSON", findings)
+
 
 if __name__ == "__main__":
     unittest.main()
