@@ -33,12 +33,18 @@ PRODUCTION_FIELDS = {
 
 def check_text(path: str, content: str) -> list[str]:
     findings = []
-    decoded = unquote(unquote(content))
-    if any(m.group(1).casefold() not in PUBLIC_REPOSITORIES
-           for m in OWNED_REFERENCE.finditer(decoded)):
-        findings.append(f"{path}: unexpected publisher-owned repository reference")
 
-    if not path.endswith(".json"):
+    def inspect_references(text: str):
+        decoded = unquote(unquote(text))
+        finding = f"{path}: unexpected publisher-owned repository reference"
+        if (any(m.group(1).casefold() not in PUBLIC_REPOSITORIES
+                for m in OWNED_REFERENCE.finditer(decoded))
+                and finding not in findings):
+            findings.append(finding)
+
+    inspect_references(content)
+
+    if not path.casefold().endswith(".json"):
         return findings
     try:
         document = json.loads(content.lstrip("\ufeff"))
@@ -48,6 +54,7 @@ def check_text(path: str, content: str) -> list[str]:
     def inspect(value):
         if isinstance(value, dict):
             for key, child in value.items():
+                inspect_references(key)
                 normalized = re.sub(r"[^a-z0-9]", "", key.casefold())
                 if PRIVATE_METADATA.search(normalized) or normalized in PRODUCTION_FIELDS:
                     findings.append(f"{path}: internal provenance or production metadata field")
@@ -55,6 +62,8 @@ def check_text(path: str, content: str) -> list[str]:
         elif isinstance(value, list):
             for child in value:
                 inspect(child)
+        elif isinstance(value, str):
+            inspect_references(value)
 
     inspect(document)
     return findings
