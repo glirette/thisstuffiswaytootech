@@ -31,6 +31,10 @@ PRODUCTION_FIELDS = {
 }
 
 
+class JSONObject(list):
+    """Retain every decoded member, including duplicates, separately from arrays."""
+
+
 def check_text(path: str, content: str) -> list[str]:
     findings = []
 
@@ -42,18 +46,26 @@ def check_text(path: str, content: str) -> list[str]:
                 and finding not in findings):
             findings.append(finding)
 
-    inspect_references(content)
-
     if not path.casefold().endswith(".json"):
+        inspect_references(content)
         return findings
     try:
-        document = json.loads(content.lstrip("\ufeff"))
+        document = json.loads(content.lstrip("\ufeff"), object_pairs_hook=JSONObject)
     except json.JSONDecodeError:
+        inspect_references(content)
         return findings + [f"{path}: invalid JSON"]
 
+    # Valid JSON is scanned after decoding: raw escapes can truncate an allowed
+    # name into a false match. Preserve all object pairs so none are overwritten.
     def inspect(value):
-        if isinstance(value, dict):
-            for key, child in value.items():
+        if isinstance(value, JSONObject):
+            seen = set()
+            for key, child in value:
+                if key in seen:
+                    finding = f"{path}: duplicate JSON member"
+                    if finding not in findings:
+                        findings.append(finding)
+                seen.add(key)
                 inspect_references(key)
                 normalized = re.sub(r"[^a-z0-9]", "", key.casefold())
                 if PRIVATE_METADATA.search(normalized) or normalized in PRODUCTION_FIELDS:
